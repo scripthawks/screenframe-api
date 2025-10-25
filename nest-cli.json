@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/screenframe-api/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/screenframe-api/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/screenframe-api",
+  "projects": {
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
+    "files": {
+      "type": "application",
+      "root": "apps/files",
+      "entryFile": "main",
+      "sourceRoot": "apps/files/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/files/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "**/env/*",
+            "watchAssets": true
+          }
+        ]
+      }
+    },
+    "main-gateway": {
+      "type": "application",
+      "root": "apps/main-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/main-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/main-gateway/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "**/env/*",
+            "watchAssets": true
+          }
+        ]
+      }
+    }
+  }
+}
