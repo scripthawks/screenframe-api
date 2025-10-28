@@ -1,18 +1,35 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  BadRequestException,
+} from '@nestjs/common';
 import { UsersService } from '../application/users.service';
-import { CreateUserDto } from '../domain/dto/create-user.dto';
+import { CreateUserInputDto } from './input-dto/create-user.input-dto';
+import { UserViewDto } from './view-dto/user.view-dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @HttpCode(HttpStatus.CREATED)
+  async create(
+    @Body() createUserInputDto: CreateUserInputDto,
+  ): Promise<UserViewDto> {
+    return await this.usersService.create(createUserInputDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @HttpCode(HttpStatus.OK)
+  async findAll(): Promise<UserViewDto[]> {
+    try {
+      return await this.usersService.findAll();
+    } catch (error) {
+      throw new BadRequestException('Failed to fetch users');
+    }
   }
 }

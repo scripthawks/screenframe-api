@@ -8,6 +8,9 @@ import { UsersRepository } from './users/infrastructure/users.repository';
 import { UsersQueryRepository } from './users/infrastructure/users.query-repository';
 import { PostsRepository } from './posts/infrastructure/posts.repository';
 import { PostsQueryRepository } from './posts/infrastructure/posts.query-repository';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { dbBaseOptions } from '@app/core/db/db-base-options';
+import { User } from './users/domain/user.entity';
 
 const strategies = [];
 const controllers = [UsersController, PostsController];
@@ -22,7 +25,18 @@ const repositories = [
 ];
 
 @Module({
-  imports: [CoreModule],
+  imports: [
+    CoreModule,
+    TypeOrmModule.forRootAsync({
+      useFactory: (): TypeOrmModuleOptions => {
+        return {
+          ...dbBaseOptions,
+          autoLoadEntities: true,
+        };
+      },
+    }),
+    TypeOrmModule.forFeature([User]),
+  ],
   controllers: [...controllers],
   providers: [...services, ...repositories],
 })
