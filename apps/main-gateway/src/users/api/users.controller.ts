@@ -5,7 +5,6 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/create-user.input-dto';
@@ -29,7 +28,7 @@ export class UsersController {
     try {
       return await this.usersService.findAll();
     } catch (error) {
-      throw new BadRequestException('Failed to fetch users');
+      return error;
     }
   }
 }

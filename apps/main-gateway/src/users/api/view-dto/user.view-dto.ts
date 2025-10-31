@@ -15,13 +15,13 @@ export class UserViewDto {
   id: string;
 
   @IsString()
-  user_name: string;
+  login: string;
 
   @IsEmail()
   email: string;
 
   @IsString()
-  password_hash: string;
+  passwordHash: string;
 
   @IsDate()
   @Type(() => Date)
@@ -29,23 +29,23 @@ export class UserViewDto {
 
   @IsDate()
   @Type(() => Date)
-  updated_at: Date | null;
+  updatedAt: Date | null;
 
   @IsBoolean()
-  is_verified: boolean;
+  isVerified: boolean;
 
   @IsBoolean()
-  is_active: boolean;
+  isActive: boolean;
 
   @IsEnum(UserRoleEnum)
   role: UserRoleEnum;
 
   @IsOptional()
   @IsString()
-  avatar_url?: string;
+  avatarUrl?: string;
 
   @IsOptional()
   @IsDate()
   @Type(() => Date)
-  last_login?: Date;
+  lastLogin?: Date;
 }
