@@ -3,7 +3,7 @@ import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 export class CreateUserInputDto {
   @IsNotEmpty()
   @IsString()
-  user_name: string;
+  login: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -11,5 +11,5 @@ export class CreateUserInputDto {
 
   @IsNotEmpty()
   @IsString()
-  password_hash: string;
+  passwordHash: string;
 }

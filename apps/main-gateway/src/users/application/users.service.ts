@@ -14,7 +14,7 @@ export class UsersService {
 
   async create(cmd: CreateUserDto): Promise<UserViewDto> {
     // return 'This action adds a new user';
-    if (!cmd.user_name || !cmd.email || !cmd.password_hash) {
+    if (!cmd.login || !cmd.email || !cmd.passwordHash) {
       throw new Error(
         'Missing required fields: user_name, email, password_hash',
       );
