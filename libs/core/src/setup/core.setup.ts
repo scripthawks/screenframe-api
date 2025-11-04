@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import {
   cookieParserSetup,
   enableCorsSetup,
+  exceptionFiltersSetup,
   globalPrefixSetup,
   pipesSetup,
   swaggerSetup,
@@ -14,4 +15,5 @@ export function coreSetup(app: INestApplication, coreConfig: CoreConfig) {
   cookieParserSetup(app);
   pipesSetup(app);
   swaggerSetup(app, coreConfig);
+  exceptionFiltersSetup(app, coreConfig);
 }
