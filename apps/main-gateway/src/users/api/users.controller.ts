@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/create-user.input-dto';
-import { UserViewDto } from './view-dto/user.view-dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,19 +15,13 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createUserInputDto: CreateUserInputDto,
-  ): Promise<UserViewDto> {
+  async create(@Body() createUserInputDto: CreateUserInputDto) {
     return await this.usersService.create(createUserInputDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll(): Promise<UserViewDto[]> {
-    try {
-      return await this.usersService.findAll();
-    } catch (error) {
-      return error;
-    }
+  async findAll() {
+    return await this.usersService.findAll();
   }
 }

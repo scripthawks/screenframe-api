@@ -3,7 +3,6 @@ import { CreateUserDto } from '../domain/dto/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { User } from '../domain/user.entity';
 import { UsersQueryRepository } from '../infrastructure/users.query-repository';
-import { UserViewDto } from '../api/view-dto/user.view-dto';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +11,7 @@ export class UsersService {
     private readonly usersQRepository: UsersQueryRepository,
   ) {}
 
-  async create(cmd: CreateUserDto): Promise<UserViewDto> {
+  async create(cmd: CreateUserDto) {
     // return 'This action adds a new user';
     if (!cmd.login || !cmd.email || !cmd.passwordHash) {
       throw new Error(
