@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
-import { envFilePaths } from '../config/env-file-paths';
 import { DataSourceOptions } from 'typeorm';
+import { envFilePaths } from '../config';
 
 config({ path: envFilePaths });
 
