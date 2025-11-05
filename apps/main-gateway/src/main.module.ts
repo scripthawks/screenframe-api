@@ -9,8 +9,8 @@ import { UsersQueryRepository } from './users/infrastructure/users.query-reposit
 import { PostsRepository } from './posts/infrastructure/posts.repository';
 import { PostsQueryRepository } from './posts/infrastructure/posts.query-repository';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { dbBaseOptions } from '@app/core/db/db-base-options';
 import { User } from './users/domain/user.entity';
+import { typeormOptions } from './core/db/typeorm/typeorm-options';
 
 const strategies = [];
 const controllers = [UsersController, PostsController];
@@ -30,7 +30,7 @@ const repositories = [
     TypeOrmModule.forRootAsync({
       useFactory: (): TypeOrmModuleOptions => {
         return {
-          ...dbBaseOptions,
+          ...typeormOptions,
           autoLoadEntities: true,
         };
       },

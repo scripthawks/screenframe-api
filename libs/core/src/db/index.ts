@@ -1,1 +1,1 @@
-export * from './db-base-options';
+export * from './typeorm-base-options';

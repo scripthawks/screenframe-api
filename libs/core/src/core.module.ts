@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CoreConfig, envFilePaths } from './config';
+import { CoreConfig, envFileBasePaths } from './config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: envFilePaths, isGlobal: true }),
+    ConfigModule.forRoot({
+      envFilePath: envFileBasePaths(__dirname),
+      isGlobal: true,
+    }),
   ],
   providers: [CoreConfig],
   exports: [CoreConfig],
