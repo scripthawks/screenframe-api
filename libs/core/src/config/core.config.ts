@@ -27,12 +27,35 @@ export class CoreConfig {
   })
   IS_SWAGGER_ENABLED: boolean;
 
+  @IsString({ message: 'DATABASE_URL is required for database connection!' })
+  DATABASE_URL: string;
+
+  @IsBoolean({
+    message:
+      'Set Env variable IS_DB_SYNCHRONIZE to enable/disable, available values: true, false, 1, 0, dangerous for production!',
+  })
+  IS_DB_SYNCHRONIZE: boolean;
+
+  @IsBoolean({
+    message:
+      'Set Env variable IS_DB_LOGGING to enable/disable, available values: true, false, 1, 0',
+  })
+  IS_DB_LOGGING: boolean;
+
   constructor(private configService: ConfigService) {
     this.ENV = this.configService.getOrThrow('NODE_ENV');
     this.PORT = Number(this.configService.getOrThrow('PORT'));
     this.GLOBAL_PREFIX = this.configService.getOrThrow('GLOBAL_PREFIX');
     this.IS_SWAGGER_ENABLED = configValidationUtility.convertToBoolean(
       this.configService.getOrThrow('IS_SWAGGER_ENABLED'),
+    );
+
+    this.DATABASE_URL = this.configService.getOrThrow('DATABASE_URL');
+    this.IS_DB_SYNCHRONIZE = configValidationUtility.convertToBoolean(
+      this.configService.getOrThrow('IS_DB_SYNCHRONIZE'),
+    );
+    this.IS_DB_LOGGING = configValidationUtility.convertToBoolean(
+      this.configService.getOrThrow('IS_DB_LOGGING'),
     );
 
     configValidationUtility.validateConfig(this);

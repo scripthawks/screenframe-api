@@ -1,18 +1,27 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from '../application/users.service';
-import { CreateUserDto } from '../domain/dto/create-user.dto';
+import { CreateUserInputDto } from './input-dto/create-user.input-dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createUserInputDto: CreateUserInputDto) {
+    return await this.usersService.create(createUserInputDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @HttpCode(HttpStatus.OK)
+  getAll() {
+    return 'Users found';
   }
 }
