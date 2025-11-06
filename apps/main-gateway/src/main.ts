@@ -7,7 +7,6 @@ import { CoreConfig } from '@app/core/config';
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
   const coreConfig = app.get<CoreConfig>(CoreConfig);
-
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
