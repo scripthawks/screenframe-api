@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         ENV_TYPE = "production"
-        PORT = 4086
+        PORT = 4087
         NAMESPACE = "screenframe-ru"
         REGISTRY_HOSTNAME = "scripthawks"
         PROJECT = "main-gateway-screenframe-api"
