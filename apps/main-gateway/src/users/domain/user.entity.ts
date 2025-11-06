@@ -1,13 +1,7 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { UserRoleEnum } from '../api/enums/user-role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
-import { BaseWithUuidIdEntity } from 'libs/core/entities/base-with-uuid-id.entity';
+import { BaseWithUuidIdEntity } from '@app/core/entities';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })
