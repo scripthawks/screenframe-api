@@ -21,7 +21,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll() {
-    return await this.usersService.findAll();
+  getAll() {
+    return 'Users found';
   }
 }

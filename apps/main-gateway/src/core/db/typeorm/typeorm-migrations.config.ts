@@ -6,7 +6,6 @@ import { User } from '../../../users/domain/user.entity';
 
 const baseDir = join(__dirname, '..', '..', '..');
 const envFilePaths = envFileBasePaths(baseDir);
-console.log('migrationsConfig: ', envFilePaths);
 const dbOptions = getTypeormBaseOptions(envFilePaths);
 const migrationsConfig: DataSourceOptions = {
   ...dbOptions,
