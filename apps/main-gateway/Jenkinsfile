@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         ENV_TYPE = "production"
-        PORT = 4084
+        PORT = 4087
         NAMESPACE = "screenframe-ru"
         REGISTRY_HOSTNAME = "scripthawks"
         PROJECT = "main-gateway-screenframe-api"
@@ -28,7 +28,7 @@ pipeline {
                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                        nvm use --lts
                        yarn install
-                       yarn test
+                       yarn test:main-gateway:unit
                     '''
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
                        export NVM_DIR="$HOME/.nvm"
                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                        nvm use --lts
-                       yarn test:e2e
+                       yarn test:main-gateway:e2e
                     '''
                 }
             }
