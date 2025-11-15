@@ -2,7 +2,7 @@ import { envFileBasePaths } from '@app/core/config';
 import { getTypeormBaseOptions } from '@app/core/db';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
-import { User } from '../../../users/domain/user.entity';
+import { User } from '../../../user-accounts/users/domain/user.entity';
 
 const baseDir = join(__dirname, '..', '..', '..');
 const envFilePaths = envFileBasePaths(baseDir);

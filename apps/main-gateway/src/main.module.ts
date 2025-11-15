@@ -1,28 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './users/api/users.controller';
-import { UsersService } from './users/application/users.service';
-import { PostsController } from './posts/api/posts.controller';
-import { PostsService } from './posts/application/posts.service';
 import { CoreModule } from '@app/core';
-import { UsersRepository } from './users/infrastructure/users.repository';
-import { UsersQueryRepository } from './users/infrastructure/users.query-repository';
-import { PostsRepository } from './posts/infrastructure/posts.repository';
-import { PostsQueryRepository } from './posts/infrastructure/posts.query-repository';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from './users/domain/user.entity';
 import { typeormOptions } from './core/db/typeorm/typeorm-options';
-
-const strategies = [];
-const controllers = [UsersController, PostsController];
-const services = [UsersService, PostsService];
-const useCases = [];
-const queries = [];
-const repositories = [
-  UsersRepository,
-  UsersQueryRepository,
-  PostsRepository,
-  PostsQueryRepository,
-];
+import { UserAccountsModule } from './user-accounts/user-accounts.module';
 
 @Module({
   imports: [
@@ -35,9 +15,9 @@ const repositories = [
         };
       },
     }),
-    TypeOrmModule.forFeature([User]),
+    UserAccountsModule,
   ],
-  controllers: [...controllers],
-  providers: [...services, ...repositories],
+  controllers: [],
+  providers: [],
 })
 export class MainModule {}
