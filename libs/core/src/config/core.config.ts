@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { configValidationUtility } from './config-validation.utility';
-import { IsBoolean, IsEnum, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Min,
+} from 'class-validator';
 import { Environments } from '../enums';
 
 @Injectable()
@@ -13,12 +20,16 @@ export class CoreConfig {
   })
   ENV: Environments;
 
-  @IsNumber({}, { message: 'Set Env variable PORT, example: 3000' })
+  @Min(1, {
+    message: 'Set Env variable PORT, must be a positive number greater than 0',
+  })
+  @IsNumber({}, { message: 'Env variable PORT must be a number' })
   PORT: number;
 
-  @IsString({
+  @IsNotEmpty({
     message: 'Set Env variable GLOBAL_PREFIX, dangerous for security!',
   })
+  @IsString()
   GLOBAL_PREFIX: string;
 
   @IsBoolean({
@@ -27,7 +38,8 @@ export class CoreConfig {
   })
   IS_SWAGGER_ENABLED: boolean;
 
-  @IsString({ message: 'DATABASE_URL is required for database connection!' })
+  @IsNotEmpty({ message: 'DATABASE_URL is required for database connection!' })
+  @IsString()
   DATABASE_URL: string;
 
   @IsBoolean({
