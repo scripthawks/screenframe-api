@@ -5,7 +5,7 @@ import { BaseWithUuidIdEntity } from '@app/core/entities';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })
-  login: string;
+  userName: string;
 
   @Column({ type: 'varchar', unique: true, collation: 'C' })
   email: string;
@@ -22,15 +22,9 @@ export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'enum', enum: UserRoleEnum, default: UserRoleEnum.USER })
   role: UserRoleEnum;
 
-  @Column({ type: 'varchar', nullable: true })
-  avatarUrl: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  lastLogin: Date;
-
   static create(dto: CreateUserDto): User {
     const user = new User();
-    user.login = dto.login;
+    user.userName = dto.userName;
     user.passwordHash = dto.passwordHash;
     user.email = dto.email;
     return user;
