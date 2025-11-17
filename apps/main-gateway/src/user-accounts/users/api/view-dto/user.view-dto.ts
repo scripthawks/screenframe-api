@@ -21,7 +21,7 @@ export class UserViewDto {
   email: string;
 
   @IsString()
-  passwordHash: string;
+  password: string;
 
   @IsDate()
   @Type(() => Date)

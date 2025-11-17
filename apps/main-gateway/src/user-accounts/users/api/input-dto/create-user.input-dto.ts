@@ -11,5 +11,5 @@ export class CreateUserInputDto {
 
   @IsNotEmpty()
   @IsString()
-  passwordHash: string;
+  password: string;
 }
