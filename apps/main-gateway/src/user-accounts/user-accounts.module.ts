@@ -10,6 +10,7 @@ import { PostsQueryRepository } from '../posts/infrastructure/posts.query-reposi
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/domain/user.entity';
 import { UserAccountConfig } from './core/config/user-account.config';
+import { EmailConfirmation } from './users/domain/emailConfirmation.entity';
 
 const configs = [UserAccountConfig];
 const strategies = [];
@@ -25,7 +26,7 @@ const repositories = [
 ];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, EmailConfirmation])],
   controllers: [...controllers],
   providers: [...configs, ...services, ...repositories],
 })
