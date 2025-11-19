@@ -15,7 +15,7 @@ export class UserViewDto {
   id: string;
 
   @IsString()
-  login: string;
+  userName: string;
 
   @IsEmail()
   email: string;
@@ -25,7 +25,7 @@ export class UserViewDto {
 
   @IsDate()
   @Type(() => Date)
-  created_at: Date;
+  createdAt: Date;
 
   @IsDate()
   @Type(() => Date)
