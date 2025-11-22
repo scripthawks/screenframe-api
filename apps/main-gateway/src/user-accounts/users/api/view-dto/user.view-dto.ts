@@ -15,17 +15,17 @@ export class UserViewDto {
   id: string;
 
   @IsString()
-  login: string;
+  userName: string;
 
   @IsEmail()
   email: string;
 
   @IsString()
-  passwordHash: string;
+  password: string;
 
   @IsDate()
   @Type(() => Date)
-  created_at: Date;
+  createdAt: Date;
 
   @IsDate()
   @Type(() => Date)

@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
-import { InjectDataSource } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
 
-  async create(user: User) {
-    return await this.dataSource.manager.save(User, user);
+  async create(user: User): Promise<User> {
+    return this.usersRepository.save(user);
+  }
+
+  async findByUserNameOrEmail(userName: string, email: string) {
+    return await this.usersRepository.findOne({
+      where: [{ userName: userName }, { email: email }],
+    });
   }
 }
