@@ -9,9 +9,9 @@ import {
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
   USERNAME_REGEX,
-} from '../../../core/constants/dto.constants';
+} from '../../../../core/constants/dto.constants';
 
-export class CreateUserInputDto {
+export class SignUpUserInputDto {
   @IsNotEmpty()
   @Length(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)
   @Matches(USERNAME_REGEX)
