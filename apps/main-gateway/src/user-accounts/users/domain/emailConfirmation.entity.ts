@@ -1,7 +1,9 @@
-import { Entity, Column, JoinColumn, Index, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
 import { BaseWithUuidIdEntity } from '@app/core/entities';
 import { User } from './user.entity';
 import { UuidProvider } from '../../core/helpers/uuid.provider';
+import { DomainException } from '@app/core/exceptions';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 
 @Entity()
 export class EmailConfirmation extends BaseWithUuidIdEntity {
@@ -48,8 +50,21 @@ export class EmailConfirmation extends BaseWithUuidIdEntity {
     this.updatedAt = new Date();
   }
 
-  confirm() {
+  confirm(): EmailConfirmation {
+    if (this.isUsed) {
+      throw new DomainException(
+        CommonExceptionCodes.BAD_REQUEST,
+        'Confirmation token already used',
+      );
+    }
+    if (this.expiresAt < new Date()) {
+      throw new DomainException(
+        CommonExceptionCodes.BAD_REQUEST,
+        'Confirmation token expired',
+      );
+    }
     this.isUsed = true;
+    this.updatedAt = new Date();
     return this;
   }
 }

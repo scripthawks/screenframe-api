@@ -66,4 +66,10 @@ export class User extends BaseWithUuidIdEntity {
     Object.assign(this, data);
     this.updatedAt = new Date();
   }
+
+  confirm(): User {
+    this.isVerified = true;
+    this.updatedAt = new Date();
+    return this;
+  }
 }
