@@ -18,6 +18,7 @@ import {
   ApiNoContentConfiguredResponse,
 } from '@app/core/decorators/swagger';
 import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
+import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -29,6 +30,7 @@ export class AuthUsersController {
 
   @Post('signup')
   @UseGuards(PasswordConfirmationGuard)
+  @UseGuards(AcceptedTermsGuard)
   @HttpCode(HttpStatus.OK)
   async createUser(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
