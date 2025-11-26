@@ -32,6 +32,8 @@ export class AuthUsersController {
   @UseGuards(PasswordConfirmationGuard)
   @UseGuards(AcceptedTermsGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiConflictConfiguredResponse('User already exists')
+  @ApiBadRequestConfiguredResponse('Validation failed')
   async createUser(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
   }
