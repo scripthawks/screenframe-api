@@ -1,4 +1,11 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -10,6 +17,7 @@ import {
   ApiConflictConfiguredResponse,
   ApiNoContentConfiguredResponse,
 } from '@app/core/decorators/swagger';
+import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -20,6 +28,7 @@ export class AuthUsersController {
   ) {}
 
   @Post('signup')
+  @UseGuards(PasswordConfirmationGuard)
   @HttpCode(HttpStatus.OK)
   async createUser(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));

@@ -32,4 +32,9 @@ export class SignUpUserInputDto {
   @TrimIsString()
   @ApiProperty()
   password: string;
+
+  @IsNotEmpty()
+  @TrimIsString()
+  @ApiProperty()
+  passwordConfirmation: string;
 }
