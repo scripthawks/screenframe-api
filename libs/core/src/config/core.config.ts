@@ -10,9 +10,10 @@ import {
   Min,
 } from 'class-validator';
 import { Environments } from '../enums';
+import { BaseConfig } from './base.config';
 
 @Injectable()
-export class CoreConfig {
+export class CoreConfig extends BaseConfig {
   @IsEnum(Environments, {
     message:
       'Set correct NODE_ENV value, available values: ' +
@@ -21,20 +22,21 @@ export class CoreConfig {
   ENV: Environments;
 
   @Min(1, {
-    message: 'Set Env variable PORT, must be a positive number greater than 0',
+    message:
+      'Set Env variable PORT, must be a positive number greater than 0, GROUP: Dangerous!',
   })
   @IsNumber({}, { message: 'Env variable PORT must be a number' })
   PORT: number;
 
   @IsNotEmpty({
-    message: 'Set Env variable GLOBAL_PREFIX, dangerous for security!',
+    message: 'Set Env variable GLOBAL_PREFIX, GROUP: Dangerous!',
   })
   @IsString()
   GLOBAL_PREFIX: string;
 
   @IsBoolean({
     message:
-      'Set Env variable IS_SWAGGER_ENABLED to enable/disable, available values: true, false, 1, 0, dangerous for security!',
+      'Set Env variable IS_SWAGGER_ENABLED to enable/disable, available values: true, false, 1, 0, GROUP: Dangerous!',
   })
   IS_SWAGGER_ENABLED: boolean;
 
@@ -44,17 +46,18 @@ export class CoreConfig {
 
   @IsBoolean({
     message:
-      'Set Env variable IS_DB_SYNCHRONIZE to enable/disable, available values: true, false, 1, 0, dangerous for production!',
+      'Set Env variable IS_DB_SYNCHRONIZE to enable/disable, available values: true, false, 1, 0, GROUP: Dangerous!',
   })
   IS_DB_SYNCHRONIZE: boolean;
 
   @IsBoolean({
     message:
-      'Set Env variable IS_DB_LOGGING to enable/disable, available values: true, false, 1, 0',
+      'Set Env variable IS_DB_LOGGING to enable/disable, available values: true, false, 1, 0, GROUP: Dangerous!',
   })
   IS_DB_LOGGING: boolean;
 
   constructor(private configService: ConfigService) {
+    super();
     this.ENV = this.configService.getOrThrow('NODE_ENV');
     this.PORT = Number(this.configService.getOrThrow('PORT'));
     this.GLOBAL_PREFIX = this.configService.getOrThrow('GLOBAL_PREFIX');
@@ -70,6 +73,6 @@ export class CoreConfig {
       this.configService.getOrThrow('IS_DB_LOGGING'),
     );
 
-    configValidationUtility.validateConfig(this);
+    this.validateConfig();
   }
 }
