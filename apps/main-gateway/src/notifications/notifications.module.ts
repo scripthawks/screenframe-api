@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { NotificationConfig } from './core/config/notification.config';
 import { mailOptions } from './core/options/mail.options';
+import { MailService } from './mail/services/mail.service';
+import { SendSignUpConfirmationEmailEventHandler } from './mail/event-handlers/send-sign-up-confirmation-email.event-handler';
 import { CqrsModule } from '@nestjs/cqrs';
+import { EmailConfirmationTemplate } from './mail/templates/email-confirmation.template';
 
 @Module({
   providers: [NotificationConfig],
@@ -10,9 +13,9 @@ import { CqrsModule } from '@nestjs/cqrs';
 })
 class NotificationConfigModule {}
 
-const services = [];
-const eventHandlers = [];
-const templates = [];
+const services = [MailService];
+const eventHandlers = [SendSignUpConfirmationEmailEventHandler];
+const templates = [EmailConfirmationTemplate];
 
 @Module({
   imports: [
