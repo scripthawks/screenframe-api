@@ -6,6 +6,7 @@ import { User } from '../../../users/domain/user.entity';
 import { UuidProvider } from '../../../core/helpers/uuid.provider';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { UserSignUpEvent } from '../events/sign-up-user.event';
+import { UserAccountConfig } from '../../../core/config/user-account.config';
 
 export class SignUpCommand {
   constructor(public userDto: CreateUserInputDto) {}
@@ -18,6 +19,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
     private readonly hashAdapter: ArgonHasher,
     private readonly uuidProvider: UuidProvider,
     private readonly eventBus: EventBus,
+    private readonly userAccountConfig: UserAccountConfig,
   ) {}
 
   async execute({ userDto: { userName, password, email } }: SignUpCommand) {
@@ -48,7 +50,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
     const user = User.createWithConfirmation(
       { userName, email, password: passwordHash },
       this.uuidProvider,
-      60 * 60 * 1000, // expire in 1 hours confirmToken
+      this.userAccountConfig.CONFIRMATION_TOKEN_EXPIRATION,
     );
 
     await this.userRepo.create(user);

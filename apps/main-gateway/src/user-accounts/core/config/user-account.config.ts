@@ -8,7 +8,8 @@ export class UserAccountConfig extends BaseConfig {
   @IsNumber(
     {},
     {
-      message: 'Set Env variable VERIFY_TOKEN_EXPIRATION, GROUP: Dangerous!',
+      message:
+        'Set Env variable CONFIRMATION_TOKEN_EXPIRATION, GROUP: Dangerous!',
     },
   )
   CONFIRMATION_TOKEN_EXPIRATION: number;
@@ -16,7 +17,7 @@ export class UserAccountConfig extends BaseConfig {
   constructor(private configService: ConfigService) {
     super();
     this.CONFIRMATION_TOKEN_EXPIRATION = Number(
-      this.configService.getOrThrow('VERIFY_TOKEN_EXPIRATION'),
+      this.configService.getOrThrow('CONFIRMATION_TOKEN_EXPIRATION'),
     );
     this.validateConfig();
   }
