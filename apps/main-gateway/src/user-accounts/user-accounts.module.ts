@@ -17,13 +17,14 @@ import { ArgonHasher } from './core/adapters/hash/argon-hasher.adapter';
 import { AuthUsersController } from './auth/api/auth-user.controller';
 import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
+import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
 const strategies = [];
 const controllers = [UsersController, PostsController, AuthUsersController];
 const services = [UsersService, PostsService];
-const useCases = [SignUpUseCase, VerifyEmailUseCase];
+const useCases = [SignUpUseCase, VerifyEmailUseCase, ResendVerificationUseCase];
 const queries = [];
 const repositories = [
   UsersRepository,

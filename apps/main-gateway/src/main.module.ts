@@ -3,6 +3,7 @@ import { CoreModule } from '@app/core';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { typeormOptions } from './core/db/typeorm/typeorm-options';
 import { UserAccountsModule } from './user-accounts/user-accounts.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserAccountsModule } from './user-accounts/user-accounts.module';
       },
     }),
     UserAccountsModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [],
