@@ -4,7 +4,7 @@ import { CreateUserInputDto } from '../../../users/api/input-dto/create-user.inp
 import { UsersRepository } from '../../../users/infrastructure/users.repository';
 import { User } from '../../../users/domain/user.entity';
 import { UuidProvider } from '../../../core/helpers/uuid.provider';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { UserSignUpEvent } from '../events/sign-up-user.event';
 
 export class SignUpCommand {
@@ -26,10 +26,19 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
       email,
     );
 
-    if (!isUserExist) {
-      return this.createUser(userName, password, email);
-    } else {
-      throw new BadRequestException();
+    if (isUserExist) {
+      if (isUserExist.userName === userName || isUserExist.email === email) {
+        throw new ConflictException('User already exists');
+      }
+    }
+
+    try {
+      await this.createUser(userName, password, email);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new BadRequestException('Validation failed');
     }
   }
 
@@ -39,7 +48,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
     const user = User.createWithConfirmation(
       { userName, email, password: passwordHash },
       this.uuidProvider,
-      5 * 60 * 1000,
+      60 * 60 * 1000, // expire in 1 hours confirmToken
     );
 
     await this.userRepo.create(user);

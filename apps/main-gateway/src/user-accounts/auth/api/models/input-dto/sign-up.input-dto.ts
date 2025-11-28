@@ -1,6 +1,12 @@
 import { TrimIsString } from '@app/core/decorators/validation';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsEmail, Length, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEmail,
+  Length,
+  Matches,
+  IsBoolean,
+} from 'class-validator';
 import {
   EMAIL_REGEX,
   PASS_MAX_LENGTH,
@@ -32,4 +38,14 @@ export class SignUpUserInputDto {
   @TrimIsString()
   @ApiProperty()
   password: string;
+
+  @IsNotEmpty()
+  @TrimIsString()
+  @ApiProperty()
+  passwordConfirmation: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  @ApiProperty()
+  acceptedTerms: boolean;
 }

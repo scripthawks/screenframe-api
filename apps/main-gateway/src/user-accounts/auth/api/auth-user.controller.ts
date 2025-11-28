@@ -1,4 +1,11 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -10,6 +17,8 @@ import {
   ApiConflictConfiguredResponse,
   ApiNoContentConfiguredResponse,
 } from '@app/core/decorators/swagger';
+import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
+import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
 import { ResendVerificationInputDto } from './input-dto/resend-verification.input-dto';
 import { ResendVerificationCommand } from '../application/use-cases/resend-verification.use-case';
 
@@ -22,7 +31,11 @@ export class AuthUsersController {
   ) {}
 
   @Post('signup')
+  @UseGuards(PasswordConfirmationGuard)
+  @UseGuards(AcceptedTermsGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiConflictConfiguredResponse('User already exists')
+  @ApiBadRequestConfiguredResponse('Validation failed')
   async createUser(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
   }
