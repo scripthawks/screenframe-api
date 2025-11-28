@@ -27,6 +27,7 @@
     "migration:main-gateway:prod:run": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d apps/main-gateway/src/core/db/typeorm/typeorm-migrations.config.ts"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -46,6 +47,7 @@
     "cookie-parser": "^1.4.7",
     "cross-env": "^10.1.0",
     "dotenv": "^17.2.3",
+    "nodemailer": "^7.0.10",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

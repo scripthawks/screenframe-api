@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RepositoryException } from '@app/core/exceptions';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 
 @Injectable()
 export class UsersRepository {
@@ -21,6 +23,20 @@ export class UsersRepository {
     return await this.usersRepository.findOne({
       where: [{ userName: userName }, { email: email }],
     });
+  }
+
+  async findByEmailOrFail(email: string): Promise<User> {
+    const foundUser = await this.usersRepository.findOne({
+      where: { email: email },
+      relations: { emailConfirmation: true },
+    });
+    if (!foundUser) {
+      throw new RepositoryException(
+        CommonExceptionCodes.BAD_REQUEST,
+        'User with this email does not exist',
+      );
+    }
+    return foundUser;
   }
 
   async findByConfirmationToken(
