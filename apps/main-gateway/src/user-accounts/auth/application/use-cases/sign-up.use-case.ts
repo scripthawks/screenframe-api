@@ -48,7 +48,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
     const user = User.createWithConfirmation(
       { userName, email, password: passwordHash },
       this.uuidProvider,
-      5 * 60 * 1000,
+      60 * 60 * 1000, // expire in 1 hours confirmToken
     );
 
     await this.userRepo.create(user);
