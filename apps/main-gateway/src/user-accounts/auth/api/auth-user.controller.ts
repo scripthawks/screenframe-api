@@ -19,6 +19,8 @@ import {
 } from '@app/core/decorators/swagger';
 import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
 import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
+import { ResendVerificationInputDto } from './input-dto/resend-verification.input-dto';
+import { ResendVerificationCommand } from '../application/use-cases/resend-verification.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -48,5 +50,21 @@ export class AuthUsersController {
     @Body() verifyEmailInputDto: VerifyEmailInputDto,
   ): Promise<void> {
     await this.commandBus.execute(new VerifyEmailCommand(verifyEmailInputDto));
+  }
+
+  @Post('resend-verification')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Resend verification if the user exists' })
+  @ApiNoContentConfiguredResponse(
+    'An email with a verification token has been sent to the specified email address',
+  )
+  @ApiBadRequestConfiguredResponse()
+  @ApiConflictConfiguredResponse('Email already confirmed')
+  async resendVerification(
+    @Body() resendVerificationInputDto: ResendVerificationInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new ResendVerificationCommand(resendVerificationInputDto),
+    );
   }
 }
