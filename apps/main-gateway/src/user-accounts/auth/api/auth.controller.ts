@@ -24,7 +24,7 @@ import { ResendVerificationCommand } from '../application/use-cases/resend-verif
 
 @ApiTags('Auth')
 @Controller('auth')
-export class AuthUsersController {
+export class AuthController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -36,7 +36,7 @@ export class AuthUsersController {
   @HttpCode(HttpStatus.OK)
   @ApiConflictConfiguredResponse('User already exists')
   @ApiBadRequestConfiguredResponse('Validation failed')
-  async createUser(@Body() userDto: CreateUserInputDto): Promise<void> {
+  async signUp(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
   }
 

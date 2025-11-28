@@ -14,7 +14,7 @@ import { EmailConfirmation } from './users/domain/emailConfirmation.entity';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UuidProvider } from './core/helpers/uuid.provider';
 import { ArgonHasher } from './core/adapters/hash/argon-hasher.adapter';
-import { AuthUsersController } from './auth/api/auth-user.controller';
+import { AuthController } from './auth/api/auth.controller';
 import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
 import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
@@ -22,7 +22,7 @@ import { ResendVerificationUseCase } from './auth/application/use-cases/resend-v
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
 const strategies = [];
-const controllers = [UsersController, PostsController, AuthUsersController];
+const controllers = [UsersController, PostsController, AuthController];
 const services = [UsersService, PostsService];
 const useCases = [SignUpUseCase, VerifyEmailUseCase, ResendVerificationUseCase];
 const queries = [];
