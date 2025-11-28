@@ -1,9 +1,6 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
+import { DomainException } from '@app/core/exceptions';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
 interface PasswordConfirmationOptions {
   passwordField?: string;
@@ -48,13 +45,15 @@ export class PasswordConfirmationGuard implements CanActivate {
     const confirmation = body[confirmationField];
 
     if (!password || !confirmation) {
-      throw new BadRequestException(
+      throw new DomainException(
+        CommonExceptionCodes.NOT_FOUND,
         `${passwordField} and ${confirmationField} are required`,
       );
     }
 
     if (password !== confirmation) {
-      throw new BadRequestException(
+      throw new DomainException(
+        CommonExceptionCodes.NOT_FOUND,
         `${confirmationField} does not match ${passwordField}`,
       );
     }

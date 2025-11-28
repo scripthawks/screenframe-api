@@ -22,7 +22,7 @@ export class EmailConfirmation extends BaseWithUuidIdEntity {
   confirmationToken: string;
 
   @Column({
-    type: 'timestamp',
+    type: 'timestamptz',
   })
   @Index()
   expiresAt: Date;

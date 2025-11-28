@@ -33,7 +33,7 @@ export class AuthController {
   @Post('signup')
   @UseGuards(PasswordConfirmationGuard)
   @UseGuards(AcceptedTermsGuard)
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiConflictConfiguredResponse('User already exists')
   @ApiBadRequestConfiguredResponse('Validation failed')
   async signUp(@Body() userDto: CreateUserInputDto): Promise<void> {
