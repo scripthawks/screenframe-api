@@ -4,6 +4,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { typeormOptions } from './core/db/typeorm/typeorm-options';
 import { UserAccountsModule } from './user-accounts/user-accounts.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { UserCleanupModule } from './user-accounts/core/cleanup/user-cleanup.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     }),
     UserAccountsModule,
     NotificationsModule,
+    UserCleanupModule,
   ],
   controllers: [],
   providers: [],
