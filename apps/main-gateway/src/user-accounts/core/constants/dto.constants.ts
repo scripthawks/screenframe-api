@@ -8,3 +8,5 @@ export const PASSWORD_REGEX =
   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"#$%&'()*+,\-.\/:\;<=>?@\[\\\]^_`{|}~]).*$/;
 export const PASS_MAX_LENGTH = 20;
 export const PASS_MIN_LENGTH = 6;
+
+export const CONFIRMATION_TOKEN_LENGTH = 500;
