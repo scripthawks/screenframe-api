@@ -18,6 +18,7 @@ import { AuthController } from './auth/api/auth.controller';
 import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
 import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -34,7 +35,17 @@ const repositories = [
 ];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, EmailConfirmation]), CqrsModule],
+  imports: [
+    TypeOrmModule.forFeature([User, EmailConfirmation]),
+    CqrsModule,
+    ThrottlerModule.forRoot([
+      {
+        name: 'auth',
+        ttl: 10000,
+        limit: 5,
+      },
+    ]),
+  ],
   controllers: [...controllers],
   providers: [
     UuidProvider,
