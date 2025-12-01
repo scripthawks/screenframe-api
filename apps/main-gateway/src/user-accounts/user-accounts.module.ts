@@ -19,12 +19,14 @@ import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
 import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { UserCleanupService } from './core/services/user-cleanup.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
 const strategies = [];
 const controllers = [UsersController, PostsController, AuthController];
-const services = [UsersService, PostsService];
+const services = [UserCleanupService, UsersService, PostsService];
 const useCases = [SignUpUseCase, VerifyEmailUseCase, ResendVerificationUseCase];
 const queries = [];
 const repositories = [
@@ -38,6 +40,7 @@ const repositories = [
   imports: [
     TypeOrmModule.forFeature([User, EmailConfirmation]),
     CqrsModule,
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         name: 'auth',

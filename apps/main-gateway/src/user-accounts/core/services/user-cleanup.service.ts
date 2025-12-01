@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../../users/domain/user.entity';
 import { EmailConfirmation } from '../../users/domain/emailConfirmation.entity';
 import { UNVERIFIED_USER_EXPIRY_24_HOURS } from '../constants/dto.constants';
@@ -24,13 +24,12 @@ export class UserCleanupService {
     try {
       const expiryDate = new Date(Date.now() - UNVERIFIED_USER_EXPIRY_24_HOURS);
 
-      const expiredUsers = await this.userRepository.find({
-        where: {
-          isVerified: false,
-          createdAt: LessThan(expiryDate),
-        },
-        relations: ['emailConfirmation'],
-      });
+      const expiredUsers = await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.emailConfirmation', 'emailConfirmation')
+        .where('user.isVerified = :isVerified', { isVerified: false })
+        .andWhere('user.createdAt < :expiryDate', { expiryDate })
+        .getMany();
 
       for (const user of expiredUsers) {
         if (user.emailConfirmation) {
