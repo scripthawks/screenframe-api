@@ -4,9 +4,10 @@ import { CreateUserInputDto } from '../../../users/api/input-dto/create-user.inp
 import { UsersRepository } from '../../../users/infrastructure/users.repository';
 import { User } from '../../../users/domain/user.entity';
 import { UuidProvider } from '../../../core/helpers/uuid.provider';
-import { BadRequestException, ConflictException } from '@nestjs/common';
 import { UserSignUpEvent } from '../events/sign-up-user.event';
 import { UserAccountConfig } from '../../../core/config/user-account.config';
+import { DomainException } from '@app/core/exceptions';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 
 export class SignUpCommand {
   constructor(public userDto: CreateUserInputDto) {}
@@ -30,18 +31,14 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
 
     if (isUserExist) {
       if (isUserExist.userName === userName || isUserExist.email === email) {
-        throw new ConflictException('User already exists');
+        throw new DomainException(
+          CommonExceptionCodes.CONFLICT,
+          'User already exists',
+        );
       }
     }
 
-    try {
-      await this.createUser(userName, password, email);
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        throw error;
-      }
-      throw new BadRequestException('Validation failed');
-    }
+    await this.createUser(userName, password, email);
   }
 
   private async createUser(userName: string, password: string, email: string) {
@@ -53,7 +50,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
       this.userAccountConfig.CONFIRMATION_TOKEN_EXPIRATION,
     );
 
-    await this.userRepo.create(user);
+    await this.userRepo.save(user);
 
     this.createUserEvent(
       userName,

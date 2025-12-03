@@ -21,6 +21,7 @@ import { PasswordConfirmationGuard } from './guards/confirmation-password.guard'
 import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
 import { ResendVerificationInputDto } from './input-dto/resend-verification.input-dto';
 import { ResendVerificationCommand } from '../application/use-cases/resend-verification.use-case';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -31,9 +32,8 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  @UseGuards(PasswordConfirmationGuard)
-  @UseGuards(AcceptedTermsGuard)
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(PasswordConfirmationGuard, AcceptedTermsGuard, ThrottlerGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiConflictConfiguredResponse('User already exists')
   @ApiBadRequestConfiguredResponse('Validation failed')
   async signUp(@Body() userDto: CreateUserInputDto): Promise<void> {

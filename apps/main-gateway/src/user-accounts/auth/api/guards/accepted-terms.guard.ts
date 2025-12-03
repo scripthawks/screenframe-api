@@ -1,9 +1,6 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
+import { DomainException } from '@app/core/exceptions';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
 interface TermsGuardRequest {
   body: {
@@ -18,8 +15,9 @@ export class AcceptedTermsGuard implements CanActivate {
     const acceptedTerms = request.body.acceptedTerms;
 
     if (acceptedTerms !== true) {
-      throw new BadRequestException(
-        'Для регистрации необходимо принять правила сервиса',
+      throw new DomainException(
+        CommonExceptionCodes.NOT_FOUND,
+        'To register, you must accept the terms of service.',
       );
     }
 

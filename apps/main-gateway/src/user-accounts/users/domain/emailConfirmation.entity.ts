@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { UuidProvider } from '../../core/helpers/uuid.provider';
 import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
+import { CONFIRMATION_TOKEN_LENGTH } from '../../core/constants/dto.constants';
 
 @Entity()
 export class EmailConfirmation extends BaseWithUuidIdEntity {
@@ -16,13 +17,13 @@ export class EmailConfirmation extends BaseWithUuidIdEntity {
 
   @Column({
     type: 'varchar',
-    length: 500,
+    length: CONFIRMATION_TOKEN_LENGTH,
     unique: true,
   })
   confirmationToken: string;
 
   @Column({
-    type: 'timestamp',
+    type: 'timestamptz',
   })
   @Index()
   expiresAt: Date;
@@ -31,7 +32,7 @@ export class EmailConfirmation extends BaseWithUuidIdEntity {
     type: 'boolean',
     default: false,
   })
-  isUsed: boolean;
+  isUsed: boolean = false;
 
   static create(
     uuidProvider: UuidProvider,
