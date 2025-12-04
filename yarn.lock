@@ -436,6 +436,28 @@
     "@css-inline/css-inline-linux-x64-musl" "0.14.1"
     "@css-inline/css-inline-win32-x64-msvc" "0.14.1"
 
+"@emnapi/core@^1.4.3":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@emnapi/core/-/core-1.7.1.tgz#3a79a02dbc84f45884a1806ebb98e5746bdfaac4"
+  integrity sha512-o1uhUASyo921r2XtHYOHy7gdkGLge8ghBEQHMWmyJFoXlpU58kIrhhN3w26lpQb6dspetweapMn2CSNwQ8I4wg==
+  dependencies:
+    "@emnapi/wasi-threads" "1.1.0"
+    tslib "^2.4.0"
+
+"@emnapi/runtime@^1.4.3":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@emnapi/runtime/-/runtime-1.7.1.tgz#a73784e23f5d57287369c808197288b52276b791"
+  integrity sha512-PVtJr5CmLwYAU9PZDMITZoR5iAOShYREoR45EyyLrbntV50mdePTgUn4AmOw90Ifcj+x2kRjdzr1HP3RrNiHGA==
+  dependencies:
+    tslib "^2.4.0"
+
+"@emnapi/wasi-threads@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@emnapi/wasi-threads/-/wasi-threads-1.1.0.tgz#60b2102fddc9ccb78607e4a3cf8403ea69be41bf"
+  integrity sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==
+  dependencies:
+    tslib "^2.4.0"
+
 "@epic-web/invariant@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@epic-web/invariant/-/invariant-1.0.0.tgz#1073e5dee6dd540410784990eb73e4acd25c9813"
@@ -1093,6 +1115,15 @@
     "@napi-rs/nice-win32-ia32-msvc" "1.1.1"
     "@napi-rs/nice-win32-x64-msvc" "1.1.1"
 
+"@napi-rs/wasm-runtime@^0.2.5":
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz#3e78a8b96e6c33a6c517e1894efbd5385a7cb6f2"
+  integrity sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==
+  dependencies:
+    "@emnapi/core" "^1.4.3"
+    "@emnapi/runtime" "^1.4.3"
+    "@tybys/wasm-util" "^0.10.0"
+
 "@nestjs-modules/mailer@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@nestjs-modules/mailer/-/mailer-2.0.2.tgz#aa282c151d1f7a52d4134347d57954b41f7fcbf8"
@@ -1279,6 +1310,98 @@
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-2.0.1.tgz#fc1a928061d1232b0a52bb754393c37a5216c89e"
   integrity sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==
 
+"@node-rs/argon2-android-arm-eabi@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-android-arm-eabi/-/argon2-android-arm-eabi-2.0.2.tgz#19697cafd85847b35699a62a0d31611afd93a60c"
+  integrity sha512-DV/H8p/jt40lrao5z5g6nM9dPNPGEHL+aK6Iy/og+dbL503Uj0AHLqj1Hk9aVUSCNnsDdUEKp4TVMi0YakDYKw==
+
+"@node-rs/argon2-android-arm64@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-android-arm64/-/argon2-android-arm64-2.0.2.tgz#cb1a253dba9f1d5dc950437b2ad5a6d28e34626a"
+  integrity sha512-1LKwskau+8O1ktKx7TbK7jx1oMOMt4YEXZOdSNIar1TQKxm6isZ0cRXgHLibPHEcNHgYRsJWDE9zvDGBB17QDg==
+
+"@node-rs/argon2-darwin-arm64@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-darwin-arm64/-/argon2-darwin-arm64-2.0.2.tgz#5d1c799d858ac8d53e35f5514d5fc13723671099"
+  integrity sha512-3TTNL/7wbcpNju5YcqUrCgXnXUSbD7ogeAKatzBVHsbpjZQbNb1NDxDjqqrWoTt6XL3z9mJUMGwbAk7zQltHtA==
+
+"@node-rs/argon2-darwin-x64@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-darwin-x64/-/argon2-darwin-x64-2.0.2.tgz#303625a9c0e5cd7316a097be42e97a97fb2ce3fd"
+  integrity sha512-vNPfkLj5Ij5111UTiYuwgxMqE7DRbOS2y58O2DIySzSHbcnu+nipmRKg+P0doRq6eKIJStyBK8dQi5Ic8pFyDw==
+
+"@node-rs/argon2-freebsd-x64@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-freebsd-x64/-/argon2-freebsd-x64-2.0.2.tgz#21e60f5f8e17cc488ad380a5eb004d4202cf5eda"
+  integrity sha512-M8vQZk01qojQfCqQU0/O1j1a4zPPrz93zc9fSINY7Q/6RhQRBCYwDw7ltDCZXg5JRGlSaeS8cUXWyhPGar3cGg==
+
+"@node-rs/argon2-linux-arm-gnueabihf@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm-gnueabihf/-/argon2-linux-arm-gnueabihf-2.0.2.tgz#ca2ba217b5ddc56dc233baaf9f6eacfb065bfe66"
+  integrity sha512-7EmmEPHLzcu0G2GDh30L6G48CH38roFC2dqlQJmtRCxs6no3tTE/pvgBGatTp/o2n2oyOJcfmgndVFcUpwMnww==
+
+"@node-rs/argon2-linux-arm64-gnu@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm64-gnu/-/argon2-linux-arm64-gnu-2.0.2.tgz#289b9ceebf41dd3125c5613aedb25751cf66da76"
+  integrity sha512-6lsYh3Ftbk+HAIZ7wNuRF4SZDtxtFTfK+HYFAQQyW7Ig3LHqasqwfUKRXVSV5tJ+xTnxjqgKzvZSUJCAyIfHew==
+
+"@node-rs/argon2-linux-arm64-musl@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm64-musl/-/argon2-linux-arm64-musl-2.0.2.tgz#9030a2834fbc4eb23fd707ee42485bcfe6f84e05"
+  integrity sha512-p3YqVMNT/4DNR67tIHTYGbedYmXxW9QlFmF39SkXyEbGQwpgSf6pH457/fyXBIYznTU/smnG9EH+C1uzT5j4hA==
+
+"@node-rs/argon2-linux-x64-gnu@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-x64-gnu/-/argon2-linux-x64-gnu-2.0.2.tgz#7d36816e4862d9511b782947737bb3e08a2a622e"
+  integrity sha512-ZM3jrHuJ0dKOhvA80gKJqBpBRmTJTFSo2+xVZR+phQcbAKRlDMSZMFDiKbSTnctkfwNFtjgDdh5g1vaEV04AvA==
+
+"@node-rs/argon2-linux-x64-musl@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-x64-musl/-/argon2-linux-x64-musl-2.0.2.tgz#2095a9bddd6cf15a82f633175fd0682d193bdea5"
+  integrity sha512-of5uPqk7oCRF/44a89YlWTEfjsftPywyTULwuFDKyD8QtVZoonrJR6ZWvfFE/6jBT68S0okAkAzzMEdBVWdxWw==
+
+"@node-rs/argon2-wasm32-wasi@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-wasm32-wasi/-/argon2-wasm32-wasi-2.0.2.tgz#9d6df558d8769c7d23c5c2011c6a750f9425c703"
+  integrity sha512-U3PzLYKSQYzTERstgtHLd4ZTkOF9co57zTXT77r0cVUsleGZOrd6ut7rHzeWwoJSiHOVxxa0OhG1JVQeB7lLoQ==
+  dependencies:
+    "@napi-rs/wasm-runtime" "^0.2.5"
+
+"@node-rs/argon2-win32-arm64-msvc@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-arm64-msvc/-/argon2-win32-arm64-msvc-2.0.2.tgz#9ceca7b2f007219b54771f15728f7c2868945fe3"
+  integrity sha512-Eisd7/NM0m23ijrGr6xI2iMocdOuyl6gO27gfMfya4C5BODbUSP7ljKJ7LrA0teqZMdYHesRDzx36Js++/vhiQ==
+
+"@node-rs/argon2-win32-ia32-msvc@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-ia32-msvc/-/argon2-win32-ia32-msvc-2.0.2.tgz#7337f5ab7e2afea6cb5f525877b22c41cd51e92a"
+  integrity sha512-GsE2ezwAYwh72f9gIjbGTZOf4HxEksb5M2eCaj+Y5rGYVwAdt7C12Q2e9H5LRYxWcFvLH4m4jiSZpQQ4upnPAQ==
+
+"@node-rs/argon2-win32-x64-msvc@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-x64-msvc/-/argon2-win32-x64-msvc-2.0.2.tgz#a435c2e128e46767eb768f9a540a75c9fa2a12c3"
+  integrity sha512-cJxWXanH4Ew9CfuZ4IAEiafpOBCe97bzoKowHCGk5lG/7kR4WF/eknnBlHW9m8q7t10mKq75kruPLtbSDqgRTw==
+
+"@node-rs/argon2@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2/-/argon2-2.0.2.tgz#44de139f6d25584b915ed76c4e3c62d613c9840f"
+  integrity sha512-t64wIsPEtNd4aUPuTAyeL2ubxATCBGmeluaKXEMAFk/8w6AJIVVkeLKMBpgLW6LU2t5cQxT+env/c6jxbtTQBg==
+  optionalDependencies:
+    "@node-rs/argon2-android-arm-eabi" "2.0.2"
+    "@node-rs/argon2-android-arm64" "2.0.2"
+    "@node-rs/argon2-darwin-arm64" "2.0.2"
+    "@node-rs/argon2-darwin-x64" "2.0.2"
+    "@node-rs/argon2-freebsd-x64" "2.0.2"
+    "@node-rs/argon2-linux-arm-gnueabihf" "2.0.2"
+    "@node-rs/argon2-linux-arm64-gnu" "2.0.2"
+    "@node-rs/argon2-linux-arm64-musl" "2.0.2"
+    "@node-rs/argon2-linux-x64-gnu" "2.0.2"
+    "@node-rs/argon2-linux-x64-musl" "2.0.2"
+    "@node-rs/argon2-wasm32-wasi" "2.0.2"
+    "@node-rs/argon2-win32-arm64-msvc" "2.0.2"
+    "@node-rs/argon2-win32-ia32-msvc" "2.0.2"
+    "@node-rs/argon2-win32-x64-msvc" "2.0.2"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -1319,11 +1442,6 @@
   dependencies:
     "@noble/hashes" "^2.0.1"
     error-causes "^3.0.2"
-
-"@phc/format@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@phc/format/-/format-1.0.0.tgz#b5627003b3216dc4362125b13f48a4daa76680e4"
-  integrity sha512-m7X9U6BG2+J+R1lSOdCiITLLrxm+cWlNI3HUFA92oLO77ObGNzaKdh8pMLqdZcshtkKuV84olNNXDfMc4FezBQ==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
@@ -1519,12 +1637,12 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
-"@types/argon2@^0.15.4":
-  version "0.15.4"
-  resolved "https://registry.yarnpkg.com/@types/argon2/-/argon2-0.15.4.tgz#7b65aff1bb3b3f09dccd2cb3132d6feb8f4e932e"
-  integrity sha512-fZPJNvZTvoyt/okKhbyj99UsDOwqzEXYPvKqfK26mViH9JB/hOwzUwDUn5qbwq9XJkLw0kDcFNu6+bnb3u5a0A==
+"@tybys/wasm-util@^0.10.0":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.10.1.tgz#ecddd3205cf1e2d5274649ff0eedd2991ed7f414"
+  integrity sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==
   dependencies:
-    argon2 "*"
+    tslib "^2.4.0"
 
 "@types/babel__core@^7.1.14":
   version "7.20.5"
@@ -2379,16 +2497,6 @@ arg@^4.1.0:
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
   integrity sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==
 
-argon2@*, argon2@^0.44.0:
-  version "0.44.0"
-  resolved "https://registry.yarnpkg.com/argon2/-/argon2-0.44.0.tgz#65a5ba662bba66af41407aa0457decf4af101742"
-  integrity sha512-zHPGN3S55sihSQo0dBbK0A5qpi2R31z7HZDZnry3ifOyj8bZZnpZND2gpmhnRGO1V/d555RwBqIK5W4Mrmv3ig==
-  dependencies:
-    "@phc/format" "^1.0.0"
-    cross-env "^10.0.0"
-    node-addon-api "^8.5.0"
-    node-gyp-build "^4.8.4"
-
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
@@ -3107,7 +3215,7 @@ cron@4.3.3:
     "@types/luxon" "~3.7.0"
     luxon "~3.7.0"
 
-cross-env@^10.0.0, cross-env@^10.1.0:
+cross-env@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-10.1.0.tgz#cfd2a6200df9ed75bfb9cb3d7ce609c13ea21783"
   integrity sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==
@@ -5977,11 +6085,6 @@ node-abort-controller@^3.0.1:
   resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-3.1.1.tgz#a94377e964a9a37ac3976d848cb5c765833b8548"
   integrity sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==
 
-node-addon-api@^8.5.0:
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.5.0.tgz#c91b2d7682fa457d2e1c388150f0dff9aafb8f3f"
-  integrity sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==
-
 node-emoji@1.11.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.11.0.tgz#69a0150e6946e2f115e9d7ea4df7971e2628301c"
@@ -5995,11 +6098,6 @@ node-fetch@^2.6.0:
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
   dependencies:
     whatwg-url "^5.0.0"
-
-node-gyp-build@^4.8.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.4.tgz#8a70ee85464ae52327772a90d66c6077a900cfc8"
-  integrity sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -7542,7 +7640,7 @@ tsconfig-paths@4.2.0, tsconfig-paths@^4.1.2, tsconfig-paths@^4.2.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@2.8.1, tslib@^2.1.0, tslib@^2.8.1:
+tslib@2.8.1, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
