@@ -6,7 +6,7 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SignUpCommand } from '../application/use-cases/sign-up.use-case';
 import { VerifyEmailCommand } from '../application/use-cases/verify-email.use-case';
@@ -22,6 +22,7 @@ import { ResendVerificationInputDto } from './input-dto/resend-verification.inpu
 import { ResendVerificationCommand } from '../application/use-cases/resend-verification.use-case';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { SignUpUserInputDto } from './input-dto/sign-up.input-dto';
+import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -43,7 +44,8 @@ export class AuthController {
   )
   @ApiConflictConfiguredResponse('User already exists')
   @ApiBadRequestConfiguredResponse()
-  async signUp(@Body() userDto: SignUpUserInputDto): Promise<void> {
+  @ApiBody({ type: SignUpUserInputDto })
+  async signUp(@Body() userDto: CreateUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
   }
 
