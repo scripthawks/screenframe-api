@@ -19,33 +19,58 @@ import {
 
 export class SignUpUserInputDto {
   @IsNotEmpty()
+  @TrimIsString()
   @Length(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)
   @Matches(USERNAME_REGEX)
-  @TrimIsString()
-  @ApiProperty()
+  @ApiProperty({
+    minLength: USERNAME_MIN_LENGTH,
+    maxLength: USERNAME_MAX_LENGTH,
+    example: 'string',
+    pattern: `${USERNAME_REGEX}`,
+    description: 'Name for create/signup User',
+  })
   userName: string;
 
   @IsNotEmpty()
+  @TrimIsString()
   @IsEmail()
   @Matches(EMAIL_REGEX)
-  @TrimIsString()
-  @ApiProperty()
+  @ApiProperty({
+    pattern: `${EMAIL_REGEX}`,
+    example: 'example@example.com',
+    description: 'Email for create/signup User',
+  })
   email: string;
 
   @IsNotEmpty()
+  @TrimIsString()
   @Length(PASS_MIN_LENGTH, PASS_MAX_LENGTH)
   @Matches(PASSWORD_REGEX)
-  @TrimIsString()
-  @ApiProperty()
+  @ApiProperty({
+    minLength: PASS_MIN_LENGTH,
+    maxLength: PASS_MAX_LENGTH,
+    example: 'string',
+    pattern: `${PASSWORD_REGEX}`,
+    description: 'Password for create/signup User',
+  })
   password: string;
 
   @IsNotEmpty()
   @TrimIsString()
-  @ApiProperty()
+  @ApiProperty({
+    minLength: PASS_MIN_LENGTH,
+    maxLength: PASS_MAX_LENGTH,
+    example: 'string',
+    pattern: `${PASSWORD_REGEX}`,
+    description: 'Password confirmation must match the password',
+  })
   passwordConfirmation: string;
 
   @IsNotEmpty()
   @IsBoolean()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Required agreement to Terms of Service and Privacy Policy',
+    example: true,
+  })
   acceptedTerms: boolean;
 }

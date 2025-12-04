@@ -6,7 +6,6 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SignUpCommand } from '../application/use-cases/sign-up.use-case';
@@ -22,6 +21,7 @@ import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
 import { ResendVerificationInputDto } from './input-dto/resend-verification.input-dto';
 import { ResendVerificationCommand } from '../application/use-cases/resend-verification.use-case';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { SignUpUserInputDto } from './input-dto/sign-up.input-dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -34,9 +34,16 @@ export class AuthController {
   @Post('signup')
   @UseGuards(PasswordConfirmationGuard, AcceptedTermsGuard, ThrottlerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary:
+      'Sign up new user. Email confirmation required - verification link will be sent to the provided email.',
+  })
+  @ApiNoContentConfiguredResponse(
+    'An email with a verification token has been sent to the specified email address',
+  )
   @ApiConflictConfiguredResponse('User already exists')
-  @ApiBadRequestConfiguredResponse('Validation failed')
-  async signUp(@Body() userDto: CreateUserInputDto): Promise<void> {
+  @ApiBadRequestConfiguredResponse()
+  async signUp(@Body() userDto: SignUpUserInputDto): Promise<void> {
     await this.commandBus.execute(new SignUpCommand(userDto));
   }
 
