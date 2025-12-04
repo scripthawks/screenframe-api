@@ -15,13 +15,13 @@ import { ApiErrorResultDto, ApiFieldErrorDto } from './dtos';
  * documentation, ensuring that the response schema is properly referenced.
  *
  * @param description - A custom description for the error response. Defaults to
- * 'If the inputModel has incorrect values.'
+ * 'Incorrect input data'
  *
  * @publicApi
  */
 
 export function ApiBadRequestConfiguredResponse(
-  description: string = 'If the inputModel has incorrect values.',
+  description: string = 'Incorrect input data',
 ) {
   return applyDecorators(
     ApiExtraModels(ApiErrorResultDto, ApiFieldErrorDto),

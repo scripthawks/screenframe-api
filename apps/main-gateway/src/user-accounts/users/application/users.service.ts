@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../domain/dto/create-user.dto';
+import { CreateUserDto } from '../domain/dto/user/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { User } from '../domain/user.entity';
 import { UsersQueryRepository } from '../infrastructure/users.query-repository';
@@ -13,7 +13,7 @@ export class UsersService {
 
   async create(cmd: CreateUserDto) {
     // return 'This action adds a new user';
-    if (!cmd.login || !cmd.email || !cmd.passwordHash) {
+    if (!cmd.userName || !cmd.email || !cmd.password) {
       throw new Error(
         'Missing required fields: user_name, email, password_hash',
       );
