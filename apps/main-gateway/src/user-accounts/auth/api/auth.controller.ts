@@ -5,6 +5,8 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -15,6 +17,7 @@ import {
   ApiBadRequestConfiguredResponse,
   ApiConflictConfiguredResponse,
   ApiNoContentConfiguredResponse,
+  ApiUnauthorizedConfiguredResponse,
 } from '@app/core/decorators/swagger';
 import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
 import { AcceptedTermsGuard } from './guards/accepted-terms.guard';
@@ -23,7 +26,13 @@ import { ResendVerificationCommand } from '../application/use-cases/resend-verif
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { SignUpUserInputDto } from './input-dto/sign-up.input-dto';
 import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-dto';
-
+import { LocalAuthGuard } from '../../core/guards/local-auth.guard';
+import { LoginInputDto } from './input-dto/login.input-dto';
+import { UserInfoInputDto } from './input-dto/user-info.input-dto';
+import { LoginResponseViewDto } from './view-dto/login-response.view-dto';
+import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
+import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
+import { Response } from 'express';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -75,5 +84,35 @@ export class AuthController {
     await this.commandBus.execute(
       new ResendVerificationCommand(resendVerificationInputDto),
     );
+  }
+
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Resend verification if the user exists' })
+  @ApiUnauthorizedConfiguredResponse()
+  @ApiBody({ type: LoginInputDto })
+  async login(
+    @Res({ passthrough: true }) response: Response,
+    @Req() { user }: UserInfoInputDto,
+  ): Promise<LoginResponseViewDto> {
+    const result: LoginSuccessViewDto = await this.commandBus.execute(
+      new LoginUserCommand(user),
+    );
+
+    const { accessToken, refreshToken } = result;
+
+    this.setCookieInResponse(refreshToken, response);
+
+    return new LoginResponseViewDto(accessToken);
+  }
+
+  private setCookieInResponse(refreshToken: string, response: Response) {
+    return response.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
   }
 }

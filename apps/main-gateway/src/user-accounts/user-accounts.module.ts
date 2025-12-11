@@ -21,13 +21,29 @@ import { ResendVerificationUseCase } from './auth/application/use-cases/resend-v
 import { ThrottlerModule } from '@nestjs/throttler';
 import { UserCleanupService } from './core/services/user-cleanup.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { JwtStrategy } from '../core/strategies/jwt-access.strategy';
+import { LocalStrategy } from './core/strategies/local.strategy';
+import { LoginUserUseCase } from './auth/application/use-cases/login-user.use-case';
+import { AuthService } from './auth/application/auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
-const strategies = [];
+const strategies = [LocalStrategy, JwtStrategy];
 const controllers = [UsersController, PostsController, AuthController];
-const services = [UserCleanupService, UsersService, PostsService];
-const useCases = [SignUpUseCase, VerifyEmailUseCase, ResendVerificationUseCase];
+const services = [
+  JwtService,
+  AuthService,
+  UserCleanupService,
+  UsersService,
+  PostsService,
+];
+const useCases = [
+  LoginUserUseCase,
+  SignUpUseCase,
+  VerifyEmailUseCase,
+  ResendVerificationUseCase,
+];
 const queries = [];
 const repositories = [
   UsersRepository,
@@ -52,6 +68,7 @@ const repositories = [
   controllers: [...controllers],
   providers: [
     UuidProvider,
+    ...strategies,
     ...configs,
     ...services,
     ...repositories,
