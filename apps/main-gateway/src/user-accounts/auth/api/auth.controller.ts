@@ -98,6 +98,7 @@ export class AuthController {
     summary:
       'Authenticates user with email and password. Returns access token and sets refresh token in HTTP-only cookie.',
   })
+  @ApiBadRequestConfiguredResponse()
   @ApiUnauthorizedConfiguredResponse()
   @ApiBody({ type: LoginInputDto })
   async login(
