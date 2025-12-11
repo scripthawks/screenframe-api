@@ -7,8 +7,9 @@ import {
   UseGuards,
   Res,
   Req,
+  Get,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SignUpCommand } from '../application/use-cases/sign-up.use-case';
 import { VerifyEmailCommand } from '../application/use-cases/verify-email.use-case';
@@ -33,6 +34,10 @@ import { LoginResponseViewDto } from './view-dto/login-response.view-dto';
 import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
+import { CurrentUserId } from '@app/core/decorators/params';
+import { MeViewDto } from './view-dto/me.view-dto';
+import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-about-current-user.query';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -89,7 +94,10 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Resend verification if the user exists' })
+  @ApiOperation({
+    summary:
+      'Authenticates user with email and password. Returns access token and sets refresh token in HTTP-only cookie.',
+  })
   @ApiUnauthorizedConfiguredResponse()
   @ApiBody({ type: LoginInputDto })
   async login(
@@ -105,6 +113,22 @@ export class AuthController {
     this.setCookieInResponse(refreshToken, response);
 
     return new LoginResponseViewDto(accessToken);
+  }
+
+  @Get('me')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary:
+      'Returns detailed information about the currently authenticated user. Requires valid JWT token.',
+  })
+  @ApiBearerAuth()
+  @ApiUnauthorizedConfiguredResponse()
+  async get(@CurrentUserId() currentUserId: string): Promise<MeViewDto> {
+    const result: MeViewDto = await this.queryBus.execute(
+      new GetInfoAboutCurrentUserQuery(currentUserId),
+    );
+    return result;
   }
 
   private setCookieInResponse(refreshToken: string, response: Response) {

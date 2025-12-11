@@ -26,6 +26,7 @@ import { LocalStrategy } from './core/strategies/local.strategy';
 import { LoginUserUseCase } from './auth/application/use-cases/login-user.use-case';
 import { AuthService } from './auth/application/auth.service';
 import { JwtService } from '@nestjs/jwt';
+import { GetInfoAboutCurrentUserQueryHandler } from './auth/application/queries/get-info-about-current-user.query';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -44,7 +45,7 @@ const useCases = [
   VerifyEmailUseCase,
   ResendVerificationUseCase,
 ];
-const queries = [];
+const queries = [GetInfoAboutCurrentUserQueryHandler];
 const repositories = [
   UsersRepository,
   UsersQueryRepository,
@@ -71,6 +72,7 @@ const repositories = [
     ...strategies,
     ...configs,
     ...services,
+    ...queries,
     ...repositories,
     ...useCases,
     ...adapters,
