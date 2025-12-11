@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
-import { InjectDataSource } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersQueryRepository {
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly usersQRepository: Repository<User>,
+  ) {}
   async findAll(): Promise<User[]> {
-    return await this.dataSource.getRepository(User).find();
+    return await this.usersQRepository.find();
   }
 }

@@ -24,10 +24,12 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
   ) {}
 
   async execute({ userDto: { userName, password, email } }: SignUpCommand) {
-    const isUserExist = await this.userRepo.findByUserNameOrEmail(
-      userName,
-      email,
-    );
+    const [userByUserName, userByEmail] = await Promise.all([
+      this.userRepo.findByUserName(userName),
+      this.userRepo.findByEmail(email),
+    ]);
+
+    const isUserExist = userByUserName || userByEmail;
 
     if (isUserExist) {
       if (isUserExist.userName === userName || isUserExist.email === email) {

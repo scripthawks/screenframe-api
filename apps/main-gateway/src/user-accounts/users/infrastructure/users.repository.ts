@@ -19,9 +19,20 @@ export class UsersRepository {
     await this.usersRepository.save(user);
   }
 
-  async findByUserNameOrEmail(userName: string, email: string) {
+  async findByUserName(userName: string) {
     return await this.usersRepository.findOne({
-      where: [{ userName: userName }, { email: email }],
+      where: [{ userName: userName }],
+    });
+  }
+
+  async findByEmail(userEmail: string) {
+    return await this.usersRepository.findOne({
+      where: [{ email: userEmail }],
+    });
+  }
+  async findByUserNameOrEmail(userNameOrEmail: string) {
+    return await this.usersRepository.findOne({
+      where: [{ userName: userNameOrEmail }, { email: userNameOrEmail }],
     });
   }
 
