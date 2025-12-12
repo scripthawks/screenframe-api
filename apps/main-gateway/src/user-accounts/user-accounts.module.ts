@@ -27,6 +27,8 @@ import { LoginUserUseCase } from './auth/application/use-cases/login-user.use-ca
 import { AuthService } from './auth/application/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { GetInfoAboutCurrentUserQueryHandler } from './auth/application/queries/get-info-about-current-user.query';
+import { SessionRepository } from './sessions/infrastructure/session.repository';
+import { Session } from './users/domain/session.entity';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -49,13 +51,14 @@ const queries = [GetInfoAboutCurrentUserQueryHandler];
 const repositories = [
   UsersRepository,
   UsersQueryRepository,
+  SessionRepository,
   PostsRepository,
   PostsQueryRepository,
 ];
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, EmailConfirmation]),
+    TypeOrmModule.forFeature([User, EmailConfirmation, Session]),
     CqrsModule,
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([

@@ -33,7 +33,7 @@ import { UserInfoInputDto } from './input-dto/user-info.input-dto';
 import { LoginResponseViewDto } from './view-dto/login-response.view-dto';
 import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
-import { Response } from 'express';
+import { Request as ExpressRequest, Response } from 'express';
 import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
 import { CurrentUserId } from '@app/core/decorators/params';
 import { MeViewDto } from './view-dto/me.view-dto';
@@ -92,7 +92,7 @@ export class AuthController {
   }
 
   @Post('login')
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard, ThrottlerGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary:
@@ -102,11 +102,14 @@ export class AuthController {
   @ApiUnauthorizedConfiguredResponse()
   @ApiBody({ type: LoginInputDto })
   async login(
+    @Req() req: ExpressRequest,
     @Res({ passthrough: true }) response: Response,
     @Req() { user }: UserInfoInputDto,
   ): Promise<LoginResponseViewDto> {
+    const ip = req.ip;
+    const deviceName = req.headers['user-agent'];
     const result: LoginSuccessViewDto = await this.commandBus.execute(
-      new LoginUserCommand(user),
+      new LoginUserCommand(user, ip, deviceName),
     );
 
     const { accessToken, refreshToken } = result;

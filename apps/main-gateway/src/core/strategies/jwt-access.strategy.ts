@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserAccountConfig } from '../../user-accounts/core/config/user-account.config';
 
-export interface JwtAccessPayload {
+export interface JwtPayload {
   userId: string;
   iat: number;
   exp: number;
@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtAccessPayload): string {
+  validate(payload: JwtPayload): string {
     const userId = payload.userId;
     return userId;
   }
