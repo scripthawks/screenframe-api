@@ -14,6 +14,10 @@ export class SessionRepository {
     await this.sessionRepository.save(session);
   }
 
+  async update(sessionId: string, updatedAt: Date) {
+    await this.sessionRepository.update({ id: sessionId }, { updatedAt });
+  }
+
   async findByUserAndDeviceName(
     userId: string,
     deviceName: string,
@@ -22,6 +26,19 @@ export class SessionRepository {
       where: {
         userId,
         deviceName,
+        isActive: true,
+      },
+    });
+  }
+
+  async findByUserAndSessionId(
+    userId: string,
+    sessionId: string,
+  ): Promise<Session | null> {
+    return this.sessionRepository.findOne({
+      where: {
+        userId,
+        id: sessionId, // предполагая что у Session есть поле id
         isActive: true,
       },
     });

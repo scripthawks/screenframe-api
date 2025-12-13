@@ -5,5 +5,5 @@ export class UserInfoInputDto {
   user: string;
 
   @TrimIsString()
-  deviceId?: string;
+  sessionId: string;
 }

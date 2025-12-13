@@ -38,6 +38,8 @@ import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
 import { CurrentUserId } from '@app/core/decorators/params';
 import { MeViewDto } from './view-dto/me.view-dto';
 import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-about-current-user.query';
+import { RefreshTokenGuard } from '../../core/guards/refresh-token.guard';
+import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-case';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -117,6 +119,26 @@ export class AuthController {
     this.setCookieInResponse(refreshToken, response);
 
     return new LoginResponseViewDto(accessToken);
+  }
+
+  @Post('refresh-token')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(RefreshTokenGuard, ThrottlerGuard)
+  async refreshToken(
+    @Req() { user, sessionId }: UserInfoInputDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result: LoginSuccessViewDto = await this.commandBus.execute(
+      new RefreshTokenCommand(user, sessionId),
+    );
+    const { accessToken, refreshToken } = result;
+    response
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+      })
+      .json({ accessToken });
+    return;
   }
 
   @Get('me')
