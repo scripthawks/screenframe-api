@@ -31,17 +31,10 @@ export class LoginUserUseCase
   ) {}
 
   async execute(command: LoginUserCommand): Promise<LoginSuccessViewDto> {
-    if (!command.ip) {
+    if (!command.ip || !command.deviceName) {
       throw new DomainException(
         CommonExceptionCodes.UNAUTHORIZED,
-        'IP address is required',
-      );
-    }
-
-    if (!command.deviceName) {
-      throw new DomainException(
-        CommonExceptionCodes.UNAUTHORIZED,
-        'Device name is required',
+        'Authentication failed',
       );
     }
 
@@ -87,6 +80,12 @@ export class LoginUserUseCase
     ip: string,
     expiresAt: number,
   ): Promise<void> {
+    const activeSessions =
+      await this.sessionRepository.countUserSessions(userId);
+    if (activeSessions >= this.userAccountConfig.MAX_SESSIONS_PER_USER) {
+      await this.sessionRepository.deleteOldestUserSession(userId);
+    }
+
     const createSessionDto: CreateSessionDto = {
       userId,
       sessionId,

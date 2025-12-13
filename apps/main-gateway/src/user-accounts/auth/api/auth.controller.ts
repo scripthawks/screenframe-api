@@ -30,7 +30,7 @@ import { CreateUserInputDto } from '../../users/api/input-dto/create-user.input-
 import { LocalAuthGuard } from '../../core/guards/local-auth.guard';
 import { LoginInputDto } from './input-dto/login.input-dto';
 import { UserInfoInputDto } from './input-dto/user-info.input-dto';
-import { LoginResponseViewDto } from './view-dto/login-response.view-dto';
+import { ResponseAccessTokenDto } from './view-dto/response-access-token.view-dto';
 import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
 import { Request as ExpressRequest, Response } from 'express';
@@ -107,7 +107,7 @@ export class AuthController {
     @Req() req: ExpressRequest,
     @Res({ passthrough: true }) response: Response,
     @Req() { user }: UserInfoInputDto,
-  ): Promise<LoginResponseViewDto> {
+  ): Promise<ResponseAccessTokenDto> {
     const ip = req.ip;
     const deviceName = req.headers['user-agent'];
     const result: LoginSuccessViewDto = await this.commandBus.execute(
@@ -118,7 +118,7 @@ export class AuthController {
 
     this.setCookieInResponse(refreshToken, response);
 
-    return new LoginResponseViewDto(accessToken);
+    return new ResponseAccessTokenDto(accessToken);
   }
 
   @Post('refresh-token')
@@ -127,18 +127,16 @@ export class AuthController {
   async refreshToken(
     @Req() { user, sessionId }: UserInfoInputDto,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<ResponseAccessTokenDto> {
     const result: LoginSuccessViewDto = await this.commandBus.execute(
       new RefreshTokenCommand(user, sessionId),
     );
+
     const { accessToken, refreshToken } = result;
-    response
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: true,
-      })
-      .json({ accessToken });
-    return;
+
+    this.setCookieInResponse(refreshToken, response);
+
+    return new ResponseAccessTokenDto(accessToken);
   }
 
   @Get('me')
@@ -161,7 +159,7 @@ export class AuthController {
     return response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }

@@ -18,17 +18,22 @@ export class SessionRepository {
     await this.sessionRepository.update({ id: sessionId }, { updatedAt });
   }
 
-  async findByUserAndDeviceName(
-    userId: string,
-    deviceName: string,
-  ): Promise<Session | null> {
-    return this.sessionRepository.findOne({
+  async deleteOldestUserSession(userId: string): Promise<Session | null> {
+    const oldestSession = await this.sessionRepository.findOne({
       where: {
         userId,
-        deviceName,
-        isActive: true,
+      },
+      order: {
+        createdAt: 'ASC',
       },
     });
+
+    if (!oldestSession) {
+      return null;
+    }
+
+    await this.sessionRepository.delete(oldestSession.id);
+    return oldestSession;
   }
 
   async findByUserAndSessionId(
@@ -38,8 +43,16 @@ export class SessionRepository {
     return this.sessionRepository.findOne({
       where: {
         userId,
-        id: sessionId, // предполагая что у Session есть поле id
+        id: sessionId,
         isActive: true,
+      },
+    });
+  }
+
+  async countUserSessions(userId: string): Promise<number> {
+    return this.sessionRepository.count({
+      where: {
+        userId,
       },
     });
   }

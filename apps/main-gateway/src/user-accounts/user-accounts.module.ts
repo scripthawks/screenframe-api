@@ -31,6 +31,7 @@ import { SessionRepository } from './sessions/infrastructure/session.repository'
 import { Session } from './users/domain/session.entity';
 import { RefreshStrategy } from './core/strategies/refresh.stategy';
 import { RefreshTokenUseCase } from './auth/application/use-cases/refresh-token.use-case';
+import { SessionCleanupService } from './core/services/cleanup/session-cleanup.service';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -40,6 +41,7 @@ const services = [
   JwtService,
   AuthService,
   UserCleanupService,
+  SessionCleanupService,
   UsersService,
   PostsService,
 ];

@@ -1,5 +1,3 @@
-// C:\Users\polin\Documents\GitHub\quiz-game\src\features\user-accounts\auth\application\use-cases\refresh-token.use-case.ts
-
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { LoginSuccessViewDto } from '../../api/view-dto/login-success.view-dto';
 import { JwtService } from '@nestjs/jwt';

@@ -2,9 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../users/domain/user.entity';
-import { EmailConfirmation } from '../../users/domain/emailConfirmation.entity';
-import { UNVERIFIED_USER_EXPIRY_24_HOURS } from '../constants/dto.constants';
+import { User } from '../../../users/domain/user.entity';
+import { EmailConfirmation } from '../../../users/domain/emailConfirmation.entity';
+import { UNVERIFIED_USER_EXPIRY_24_HOURS } from '../../constants/dto.constants';
 
 @Injectable()
 export class UserCleanupService {
