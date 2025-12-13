@@ -19,7 +19,7 @@ import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
 import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { UserCleanupService } from './core/services/user-cleanup.service';
+import { UserCleanupService } from './core/services/cleanup/user-cleanup.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { JwtStrategy } from '../core/strategies/jwt-access.strategy';
 import { LocalStrategy } from './core/strategies/local.strategy';
