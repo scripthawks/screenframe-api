@@ -32,10 +32,17 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
     const isUserExist = userByUserName || userByEmail;
 
     if (isUserExist) {
-      if (isUserExist.userName === userName || isUserExist.email === email) {
+      if (isUserExist.email === email) {
         throw new DomainException(
           CommonExceptionCodes.CONFLICT,
-          'User already exists',
+          'User with this email is already registered',
+        );
+      }
+
+      if (isUserExist.userName === userName) {
+        throw new DomainException(
+          CommonExceptionCodes.CONFLICT,
+          'User with this username is already registered',
         );
       }
     }

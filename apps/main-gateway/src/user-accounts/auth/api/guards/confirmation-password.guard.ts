@@ -44,17 +44,10 @@ export class PasswordConfirmationGuard implements CanActivate {
     const password = body[passwordField];
     const confirmation = body[confirmationField];
 
-    if (!password || !confirmation) {
+    if (!password || !confirmation || password !== confirmation) {
       throw new DomainException(
         CommonExceptionCodes.NOT_FOUND,
-        `${passwordField} and ${confirmationField} are required`,
-      );
-    }
-
-    if (password !== confirmation) {
-      throw new DomainException(
-        CommonExceptionCodes.NOT_FOUND,
-        `${confirmationField} does not match ${passwordField}`,
+        `Passwords must match`,
       );
     }
 
