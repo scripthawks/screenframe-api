@@ -14,15 +14,45 @@ export class SessionRepository {
     await this.sessionRepository.save(session);
   }
 
-  async findByUserAndDeviceName(
+  async update(sessionId: string, updatedAt: Date) {
+    await this.sessionRepository.update({ id: sessionId }, { updatedAt });
+  }
+
+  async deleteOldestUserSession(userId: string): Promise<Session | null> {
+    const oldestSession = await this.sessionRepository.findOne({
+      where: {
+        userId,
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    });
+
+    if (!oldestSession) {
+      return null;
+    }
+
+    await this.sessionRepository.delete(oldestSession.id);
+    return oldestSession;
+  }
+
+  async findByUserAndSessionId(
     userId: string,
-    deviceName: string,
+    sessionId: string,
   ): Promise<Session | null> {
     return this.sessionRepository.findOne({
       where: {
         userId,
-        deviceName,
+        id: sessionId,
         isActive: true,
+      },
+    });
+  }
+
+  async countUserSessions(userId: string): Promise<number> {
+    return this.sessionRepository.count({
+      where: {
+        userId,
       },
     });
   }

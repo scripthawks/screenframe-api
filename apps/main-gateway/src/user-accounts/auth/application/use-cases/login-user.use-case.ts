@@ -31,17 +31,10 @@ export class LoginUserUseCase
   ) {}
 
   async execute(command: LoginUserCommand): Promise<LoginSuccessViewDto> {
-    if (!command.ip) {
+    if (!command.ip || !command.deviceName) {
       throw new DomainException(
         CommonExceptionCodes.UNAUTHORIZED,
-        'IP address is required',
-      );
-    }
-
-    if (!command.deviceName) {
-      throw new DomainException(
-        CommonExceptionCodes.UNAUTHORIZED,
-        'Device name is required',
+        'Authentication failed',
       );
     }
 
@@ -50,7 +43,7 @@ export class LoginUserUseCase
     };
     const payloadForRefreshToken = {
       userId: command.userId,
-      deviceId: this.uuidProvider.generate(),
+      sessionId: this.uuidProvider.generate(),
     };
     const accessToken = await this.jwtService.signAsync(payloadForAccessToken, {
       secret: this.userAccountConfig.ACCESS_TOKEN_SECRET,
@@ -66,25 +59,13 @@ export class LoginUserUseCase
     );
     const decodePayload: JwtPayload = this.jwtService.decode(refreshToken);
 
-    const session = await this.sessionRepository.findByUserAndDeviceName(
+    await this.createSession(
       command.userId,
+      payloadForRefreshToken.sessionId,
       command.deviceName,
+      command.ip,
+      decodePayload.exp,
     );
-
-    if (session && session.isActive) {
-      await this.updateSession(
-        session,
-        command.ip,
-        new Date(decodePayload.exp * 1000),
-      );
-    } else {
-      await this.createSession(
-        command.userId,
-        command.deviceName,
-        command.ip,
-        decodePayload.exp,
-      );
-    }
 
     return {
       accessToken,
@@ -94,29 +75,25 @@ export class LoginUserUseCase
 
   private async createSession(
     userId: string,
+    sessionId: string,
     deviceName: string,
     ip: string,
     expiresAt: number,
   ): Promise<void> {
+    const activeSessions =
+      await this.sessionRepository.countUserSessions(userId);
+    if (activeSessions >= this.userAccountConfig.MAX_SESSIONS_PER_USER) {
+      await this.sessionRepository.deleteOldestUserSession(userId);
+    }
+
     const createSessionDto: CreateSessionDto = {
       userId,
+      sessionId,
       deviceName,
       ipAddress: ip,
       expiresAt,
     };
     const createdSession = Session.create(createSessionDto);
     await this.sessionRepository.save(createdSession);
-  }
-
-  private async updateSession(
-    session: Session,
-    ip: string,
-    expiresAt: Date,
-  ): Promise<void> {
-    session.update({
-      ipAddress: ip,
-      expiresAt,
-    });
-    await this.sessionRepository.save(session);
   }
 }

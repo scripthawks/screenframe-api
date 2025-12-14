@@ -19,7 +19,7 @@ import { SignUpUseCase } from './auth/application/use-cases/sign-up.use-case';
 import { VerifyEmailUseCase } from './auth/application/use-cases/verify-email.use-case';
 import { ResendVerificationUseCase } from './auth/application/use-cases/resend-verification.use-case';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { UserCleanupService } from './core/services/user-cleanup.service';
+import { UserCleanupService } from './core/services/cleanup/user-cleanup.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { JwtStrategy } from '../core/strategies/jwt-access.strategy';
 import { LocalStrategy } from './core/strategies/local.strategy';
@@ -29,19 +29,24 @@ import { JwtService } from '@nestjs/jwt';
 import { GetInfoAboutCurrentUserQueryHandler } from './auth/application/queries/get-info-about-current-user.query';
 import { SessionRepository } from './sessions/infrastructure/session.repository';
 import { Session } from './users/domain/session.entity';
+import { RefreshStrategy } from './core/strategies/refresh.stategy';
+import { RefreshTokenUseCase } from './auth/application/use-cases/refresh-token.use-case';
+import { SessionCleanupService } from './core/services/cleanup/session-cleanup.service';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
-const strategies = [LocalStrategy, JwtStrategy];
+const strategies = [LocalStrategy, RefreshStrategy, JwtStrategy];
 const controllers = [UsersController, PostsController, AuthController];
 const services = [
   JwtService,
   AuthService,
   UserCleanupService,
+  SessionCleanupService,
   UsersService,
   PostsService,
 ];
 const useCases = [
+  RefreshTokenUseCase,
   LoginUserUseCase,
   SignUpUseCase,
   VerifyEmailUseCase,

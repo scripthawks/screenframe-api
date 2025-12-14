@@ -34,6 +34,15 @@ export class UserAccountConfig extends BaseConfig {
   })
   REFRESH_TOKEN_EXPIRATION: string;
 
+  @IsNumber(
+    {},
+    {
+      message:
+        'Set Env variable MAX_SESSIONS_PER_USER, GROUP: Session Management!',
+    },
+  )
+  MAX_SESSIONS_PER_USER: number;
+
   constructor(private configService: ConfigService) {
     super();
 
@@ -52,6 +61,10 @@ export class UserAccountConfig extends BaseConfig {
     );
     this.REFRESH_TOKEN_EXPIRATION = this.configService.getOrThrow(
       'REFRESH_TOKEN_EXPIRATION',
+    );
+
+    this.MAX_SESSIONS_PER_USER = Number(
+      this.configService.getOrThrow('MAX_SESSIONS_PER_USER'),
     );
 
     this.validateConfig();
