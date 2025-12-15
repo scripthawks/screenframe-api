@@ -13,13 +13,12 @@ export class AuthService {
   ) {}
 
   async validateUser(loginInput: LoginInputDto): Promise<string | null> {
-    const { userNameOrEmail, password } = loginInput;
-    const user =
-      await this.usersRepository.findByUserNameOrEmail(userNameOrEmail);
+    const { email, password } = loginInput;
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new DomainException(
         CommonExceptionCodes.BAD_REQUEST,
-        'Invalid username or email',
+        'The email or password are incorrect. Try again please',
       );
     }
     const isPasswordValid = await this.bcryptService.checkPassword(
@@ -29,14 +28,14 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new DomainException(
         CommonExceptionCodes.BAD_REQUEST,
-        'Invalid password',
+        'The email or password are incorrect. Try again please',
       );
     }
 
     if (!user.isVerified) {
       throw new DomainException(
         CommonExceptionCodes.UNAUTHORIZED,
-        'Please verify your email first',
+        'Email not verified. Please sign in again to receive a new verification link.',
       );
     }
 

@@ -30,11 +30,6 @@ export class UsersRepository {
       where: [{ email: userEmail }],
     });
   }
-  async findByUserNameOrEmail(userNameOrEmail: string) {
-    return await this.usersRepository.findOne({
-      where: [{ userName: userNameOrEmail }, { email: userNameOrEmail }],
-    });
-  }
 
   async findByEmailOrFail(email: string): Promise<User> {
     const foundUser = await this.usersRepository.findOne({

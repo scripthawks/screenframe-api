@@ -100,8 +100,10 @@ export class AuthController {
     summary:
       'Authenticates user with email and password. Returns access token and sets refresh token in HTTP-only cookie.',
   })
-  @ApiBadRequestConfiguredResponse()
-  @ApiUnauthorizedConfiguredResponse()
+  @ApiBadRequestConfiguredResponse(
+    'Invalid email format or password requirements not met',
+  )
+  @ApiUnauthorizedConfiguredResponse('Email not verified.')
   @ApiBody({ type: LoginInputDto })
   async login(
     @Req() req: ExpressRequest,
@@ -124,6 +126,16 @@ export class AuthController {
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshTokenGuard, ThrottlerGuard)
+  @ApiOperation({
+    summary:
+      'Refresh access token. Issues new access and refresh tokens using valid refresh token from HTTP-only cookie. Invalidates previous refresh token.',
+  })
+  @ApiBadRequestConfiguredResponse(
+    'Invalid refresh token format or missing cookie',
+  )
+  @ApiUnauthorizedConfiguredResponse(
+    'Invalid, expired or revoked refresh token',
+  )
   async refreshToken(
     @Req() { user, sessionId }: UserInfoInputDto,
     @Res({ passthrough: true }) response: Response,
@@ -147,7 +159,9 @@ export class AuthController {
       'Returns detailed information about the currently authenticated user. Requires valid JWT token.',
   })
   @ApiBearerAuth()
-  @ApiUnauthorizedConfiguredResponse()
+  @ApiUnauthorizedConfiguredResponse(
+    'JWT refreshToken inside cookie is missing, expired or incorrect',
+  )
   async get(@CurrentUserId() currentUserId: string): Promise<MeViewDto> {
     const result: MeViewDto = await this.queryBus.execute(
       new GetInfoAboutCurrentUserQuery(currentUserId),

@@ -49,7 +49,7 @@ export class SignUpUserInputDto {
   @ApiProperty({
     minLength: PASS_MIN_LENGTH,
     maxLength: PASS_MAX_LENGTH,
-    example: 'string',
+    example: 'Str0ngP@ssw0rd!',
     pattern: `${PASSWORD_REGEX}`,
     description: 'Password for create/signup User',
   })
@@ -60,7 +60,7 @@ export class SignUpUserInputDto {
   @ApiProperty({
     minLength: PASS_MIN_LENGTH,
     maxLength: PASS_MAX_LENGTH,
-    example: 'string',
+    example: 'Str0ngP@ssw0rd!',
     pattern: `${PASSWORD_REGEX}`,
     description: 'Password confirmation must match the password',
   })
