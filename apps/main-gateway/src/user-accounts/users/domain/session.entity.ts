@@ -42,4 +42,10 @@ export class Session extends BaseEntity {
     Object.assign(this, data);
     this.updatedAt = new Date();
   }
+
+  deactivate() {
+    this.expiresAt = new Date();
+    this.isActive = false;
+    this.updatedAt = new Date();
+  }
 }

@@ -18,21 +18,17 @@ export class SessionRepository {
     await this.sessionRepository.update({ id: sessionId }, { updatedAt });
   }
 
-  async deleteOldestUserSession(userId: string): Promise<Session | null> {
+  async deactivateOldestUserSession(userId: string): Promise<Session | null> {
     const oldestSession = await this.sessionRepository.findOne({
-      where: {
-        userId,
-      },
-      order: {
-        createdAt: 'ASC',
-      },
+      where: { userId, isActive: true },
+      order: { createdAt: 'ASC' },
     });
 
-    if (!oldestSession) {
-      return null;
-    }
+    if (!oldestSession) return null;
 
-    await this.sessionRepository.delete(oldestSession.id);
+    oldestSession.deactivate();
+
+    await this.sessionRepository.save(oldestSession);
     return oldestSession;
   }
 

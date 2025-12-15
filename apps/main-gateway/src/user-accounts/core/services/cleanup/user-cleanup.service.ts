@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../../../users/domain/user.entity';
 import { EmailConfirmation } from '../../../users/domain/emailConfirmation.entity';
 import { UNVERIFIED_USER_EXPIRY_24_HOURS } from '../../constants/dto.constants';
+import { UserAccountConfig } from '../../config/user-account.config';
 
 @Injectable()
 export class UserCleanupService {
@@ -15,6 +16,7 @@ export class UserCleanupService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(EmailConfirmation)
     private readonly emailConfirmationRepository: Repository<EmailConfirmation>,
+    private readonly userAccountConfig: UserAccountConfig,
   ) {}
 
   @Cron('0 2 * * *')
@@ -29,30 +31,45 @@ export class UserCleanupService {
         .leftJoinAndSelect('user.emailConfirmation', 'emailConfirmation')
         .where('user.isVerified = :isVerified', { isVerified: false })
         .andWhere('user.createdAt < :expiryDate', { expiryDate })
+        .select(['user.id', 'emailConfirmation.id'])
+        .limit(this.userAccountConfig.USER_CLEANUP_BATCH_SIZE)
         .getMany();
 
-      for (const user of expiredUsers) {
-        if (user.emailConfirmation) {
-          await this.emailConfirmationRepository.delete(
-            user.emailConfirmation.id,
-          );
-        }
-
-        await this.userRepository.delete(user.id);
+      if (expiredUsers.length === 0) {
+        this.logger.log('No expired sessions found');
+        return;
       }
 
+      const userIds = expiredUsers.map((user) => user.id);
+      const emailConfirmationIds = expiredUsers
+        .filter((user) => user.emailConfirmation)
+        .map((user) => user.emailConfirmation.id);
+
+      let emailConfirmationsDeleted = 0;
+      if (emailConfirmationIds.length > 0) {
+        const emailDeleteResult = await this.emailConfirmationRepository
+          .createQueryBuilder()
+          .delete()
+          .where('id IN (:...ids)', { ids: emailConfirmationIds })
+          .execute();
+        emailConfirmationsDeleted = emailDeleteResult.affected || 0;
+      }
+
+      const usersDeleteResult = await this.userRepository
+        .createQueryBuilder()
+        .delete()
+        .where('id IN (:...ids)', { ids: userIds })
+        .execute();
+
+      const usersDeleted = usersDeleteResult.affected || 0;
+
       this.logger.log(
-        `Cleanup completed. Processed ${expiredUsers.length} users.`,
+        `Cleanup completed. Deleted ${usersDeleted} users and ${emailConfirmationsDeleted} email confirmations in ONE query.`,
       );
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
       this.logger.error(`Cleanup job failed: ${errorMessage}`);
     }
-  }
-
-  async manualCleanup(): Promise<void> {
-    this.logger.log('Manual cleanup triggered');
-    await this.cleanupExpiredUnverifiedUsers();
   }
 }

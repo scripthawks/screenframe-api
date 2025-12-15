@@ -83,7 +83,7 @@ export class LoginUserUseCase
     const activeSessions =
       await this.sessionRepository.countUserSessions(userId);
     if (activeSessions >= this.userAccountConfig.MAX_SESSIONS_PER_USER) {
-      await this.sessionRepository.deleteOldestUserSession(userId);
+      await this.sessionRepository.deactivateOldestUserSession(userId);
     }
 
     const createSessionDto: CreateSessionDto = {

@@ -43,6 +43,24 @@ export class UserAccountConfig extends BaseConfig {
   )
   MAX_SESSIONS_PER_USER: number;
 
+  @IsNumber(
+    {},
+    {
+      message:
+        'Set Env variable USER_CLEANUP_BATCH_SIZE, GROUP: Cleanup Configuration!',
+    },
+  )
+  USER_CLEANUP_BATCH_SIZE: number;
+
+  @IsNumber(
+    {},
+    {
+      message:
+        'Set Env variable SESSION_CLEANUP_BATCH_SIZE, GROUP: Cleanup Configuration!',
+    },
+  )
+  SESSION_CLEANUP_BATCH_SIZE: number;
+
   constructor(private configService: ConfigService) {
     super();
 
@@ -65,6 +83,14 @@ export class UserAccountConfig extends BaseConfig {
 
     this.MAX_SESSIONS_PER_USER = Number(
       this.configService.getOrThrow('MAX_SESSIONS_PER_USER'),
+    );
+
+    this.USER_CLEANUP_BATCH_SIZE = Number(
+      this.configService.getOrThrow('USER_CLEANUP_BATCH_SIZE'),
+    );
+
+    this.SESSION_CLEANUP_BATCH_SIZE = Number(
+      this.configService.getOrThrow('SESSION_CLEANUP_BATCH_SIZE'),
     );
 
     this.validateConfig();
