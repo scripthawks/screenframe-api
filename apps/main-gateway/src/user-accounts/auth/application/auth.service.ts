@@ -8,11 +8,11 @@ import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly bcryptService: ArgonHasher,
+    private readonly argonHasher: ArgonHasher,
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  async validateUser(loginInput: LoginInputDto): Promise<string | null> {
+  async validateUser(loginInput: LoginInputDto): Promise<string> {
     const { email, password } = loginInput;
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
@@ -21,7 +21,7 @@ export class AuthService {
         'The email or password are incorrect. Try again please',
       );
     }
-    const isPasswordValid = await this.bcryptService.checkPassword(
+    const isPasswordValid = await this.argonHasher.checkPassword(
       password,
       user.password,
     );

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 import { BaseEntity } from '@app/core/entities';
 import { CreateSessionDto } from './dto/session/create-session.dto';
@@ -9,7 +9,6 @@ export class Session extends BaseEntity {
   id: string;
 
   @ManyToOne(() => User, (user) => user.sessions)
-  @JoinColumn()
   user: User;
 
   @Column()
