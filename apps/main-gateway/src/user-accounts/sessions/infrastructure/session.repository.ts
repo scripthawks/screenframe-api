@@ -32,6 +32,12 @@ export class SessionRepository {
     return oldestSession;
   }
 
+  async deactivate(session: Session) {
+    session.deactivate();
+    await this.sessionRepository.save(session);
+    return true;
+  }
+
   async findByUserAndSessionId(
     userId: string,
     sessionId: string,
@@ -42,6 +48,12 @@ export class SessionRepository {
         id: sessionId,
         isActive: true,
       },
+    });
+  }
+  async findById(sessionId: string) {
+    return await this.sessionRepository.findOne({
+      where: { id: sessionId },
+      relations: { user: true },
     });
   }
 

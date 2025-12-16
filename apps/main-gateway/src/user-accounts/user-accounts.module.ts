@@ -32,6 +32,7 @@ import { Session } from './users/domain/session.entity';
 import { RefreshStrategy } from './core/strategies/refresh.stategy';
 import { RefreshTokenUseCase } from './auth/application/use-cases/refresh-token.use-case';
 import { SessionCleanupService } from './core/services/cleanup/session-cleanup.service';
+import { LogoutUseCase } from './auth/application/use-cases/logout.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -48,6 +49,7 @@ const services = [
 const useCases = [
   RefreshTokenUseCase,
   LoginUserUseCase,
+  LogoutUseCase,
   SignUpUseCase,
   VerifyEmailUseCase,
   ResendVerificationUseCase,

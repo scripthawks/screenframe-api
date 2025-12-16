@@ -35,11 +35,13 @@ import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
 import { Request as ExpressRequest, Response } from 'express';
 import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
-import { CurrentUserId } from '@app/core/decorators/params';
+import { CurrentSessionId, CurrentUserId } from '@app/core/decorators/params';
 import { MeViewDto } from './view-dto/me.view-dto';
 import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-about-current-user.query';
 import { RefreshTokenGuard } from '../../core/guards/refresh-token.guard';
 import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-case';
+import { LogoutCommand } from '../application/use-cases/logout.use-case';
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -149,6 +151,20 @@ export class AuthController {
     this.setCookieInResponse(refreshToken, response);
 
     return new ResponseAccessTokenDto(accessToken);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(RefreshTokenGuard)
+  @ApiNoContentConfiguredResponse()
+  @ApiUnauthorizedConfiguredResponse()
+  async logout(
+    @CurrentSessionId() { sessionId }: UserInfoInputDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.commandBus.execute(new LogoutCommand(sessionId));
+    response.clearCookie('refreshToken');
+    return;
   }
 
   @Get('me')
