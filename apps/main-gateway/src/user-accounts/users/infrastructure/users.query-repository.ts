@@ -8,15 +8,15 @@ import { MeViewDto } from '../../auth/api/view-dto/me.view-dto';
 export class UsersQueryRepository {
   constructor(
     @InjectRepository(User)
-    private readonly usersQRepository: Repository<User>,
+    private readonly usersQueryRepository: Repository<User>,
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.usersQRepository.find();
+    return await this.usersQueryRepository.find();
   }
 
   async findAuthUserById(userId: string): Promise<MeViewDto | null> {
-    const foundUser = await this.usersQRepository.findOne({
+    const foundUser = await this.usersQueryRepository.findOne({
       where: { id: userId },
     });
     if (!foundUser) {

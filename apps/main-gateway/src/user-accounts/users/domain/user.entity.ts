@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { UserRoleEnum } from '../api/enums/user-role.enum';
-import { CreateUserDto } from './dto/user/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { BaseWithUuidIdEntity } from '@app/core/entities';
 import { CreateUserInputDto } from '../api/input-dto/create-user.input-dto';
 import { UuidProvider } from '../../core/helpers/uuid.provider';
 import { EmailConfirmation } from './emailConfirmation.entity';
-import { Session } from './session.entity';
+import { Session } from '../../sessions/domain/session.entity';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })

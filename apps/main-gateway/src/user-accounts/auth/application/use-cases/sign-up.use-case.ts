@@ -16,8 +16,8 @@ export class SignUpCommand {
 @CommandHandler(SignUpCommand)
 export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
   constructor(
-    private readonly userRepo: UsersRepository,
-    private readonly hashAdapter: ArgonHasher,
+    private readonly usersRepository: UsersRepository,
+    private readonly argonHasher: ArgonHasher,
     private readonly uuidProvider: UuidProvider,
     private readonly eventBus: EventBus,
     private readonly userAccountConfig: UserAccountConfig,
@@ -25,8 +25,8 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
 
   async execute({ userDto: { userName, password, email } }: SignUpCommand) {
     const [userByUserName, userByEmail] = await Promise.all([
-      this.userRepo.findByUserName(userName),
-      this.userRepo.findByEmail(email),
+      this.usersRepository.findByUserName(userName),
+      this.usersRepository.findByEmail(email),
     ]);
 
     const isUserExist = userByUserName || userByEmail;
@@ -51,7 +51,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
   }
 
   private async createUser(userName: string, password: string, email: string) {
-    const passwordHash = await this.hashAdapter.generateHash(password);
+    const passwordHash = await this.argonHasher.generateHash(password);
 
     const user = User.createWithConfirmation(
       { userName, email, password: passwordHash },
@@ -59,7 +59,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
       this.userAccountConfig.CONFIRMATION_TOKEN_EXPIRATION,
     );
 
-    await this.userRepo.save(user);
+    await this.usersRepository.save(user);
 
     this.createUserEvent(
       userName,

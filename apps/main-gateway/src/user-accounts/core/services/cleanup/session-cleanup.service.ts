@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Session } from '../../../users/domain/session.entity';
+import { Session } from '../../../sessions/domain/session.entity';
 import { Repository } from 'typeorm';
 import { UserAccountConfig } from '../../config/user-account.config';
 

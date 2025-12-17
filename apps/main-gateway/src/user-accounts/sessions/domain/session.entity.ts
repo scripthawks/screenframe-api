@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../users/domain/user.entity';
 import { BaseEntity } from '@app/core/entities';
-import { CreateSessionDto } from './dto/session/create-session.dto';
+import { CreateSessionDto } from './dto/create-session.dto';
 
 @Entity()
 export class Session extends BaseEntity {

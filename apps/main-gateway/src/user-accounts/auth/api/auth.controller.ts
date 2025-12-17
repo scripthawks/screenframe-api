@@ -1,13 +1,13 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  Get,
   HttpCode,
   HttpStatus,
-  UseGuards,
-  Res,
+  Post,
   Req,
-  Get,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -179,10 +179,9 @@ export class AuthController {
     'JWT refreshToken inside cookie is missing, expired or incorrect',
   )
   async get(@CurrentUserId() currentUserId: string): Promise<MeViewDto> {
-    const result: MeViewDto = await this.queryBus.execute(
+    return await this.queryBus.execute(
       new GetInfoAboutCurrentUserQuery(currentUserId),
     );
-    return result;
   }
 
   private setCookieInResponse(refreshToken: string, response: Response) {
