@@ -1,13 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { User } from '../../users/domain/user.entity';
-import { BaseEntity } from '@app/core/entities';
+import { BaseWithUuidIdEntity } from '@app/core/entities';
 import { CreateSessionDto } from './dto/create-session.dto';
 
 @Entity()
-export class Session extends BaseEntity {
-  @PrimaryColumn({ type: 'uuid', unique: true })
-  id: string;
-
+export class Session extends BaseWithUuidIdEntity {
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
 
@@ -24,7 +21,7 @@ export class Session extends BaseEntity {
   expiresAt: Date;
 
   @Column({ type: 'boolean', default: true })
-  isActive: boolean;
+  isActive: boolean = true;
 
   static create(dto: CreateSessionDto): Session {
     const session = new this();
