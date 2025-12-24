@@ -8,4 +8,6 @@ export class CreateSessionDto {
   ipAddress: string;
 
   expiresAt: number;
+
+  lastActive: number;
 }

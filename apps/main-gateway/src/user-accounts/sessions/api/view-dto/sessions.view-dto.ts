@@ -3,19 +3,23 @@ import { Session } from '../../domain/session.entity';
 
 export class SessionsViewDto {
   @ApiProperty()
+  id: string;
+
+  @ApiProperty()
   deviceName: string;
 
   @ApiProperty()
   ipAddress: string;
 
-  @ApiProperty()
-  deviceId: string;
+  @ApiProperty({ type: Date })
+  lastActiveDate: Date;
 
   static mapToView(session: Session): SessionsViewDto {
     const model = new SessionsViewDto();
+    model.id = session.id;
     model.deviceName = session.deviceName;
     model.ipAddress = session.ipAddress;
-    model.deviceId = session.id;
+    model.lastActiveDate = session.lastActive;
     return model;
   }
 }

@@ -18,6 +18,13 @@ export class SessionsRepository {
     await this.sessionsRepository.update({ id: sessionId }, { updatedAt });
   }
 
+  async updateLastActivity(sessionId: string): Promise<void> {
+    await this.sessionsRepository.update(
+      { id: sessionId },
+      { lastActive: new Date() },
+    );
+  }
+
   async deactivateOldestUserSession(userId: string): Promise<Session | null> {
     const oldestSession = await this.sessionsRepository.findOne({
       where: { userId, isActive: true },

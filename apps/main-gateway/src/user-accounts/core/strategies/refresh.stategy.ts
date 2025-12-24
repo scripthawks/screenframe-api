@@ -41,6 +41,9 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         'Session not found',
       );
     }
+
+    await this.sessionsRepository.updateLastActivity(payload.sessionId);
+
     return payload;
   }
 }

@@ -65,6 +65,7 @@ export class LoginUserUseCase
       command.deviceName,
       command.ip,
       decodePayload.exp,
+      decodePayload.iat,
     );
 
     return {
@@ -79,6 +80,7 @@ export class LoginUserUseCase
     deviceName: string,
     ip: string,
     expiresAt: number,
+    lastActive: number,
   ): Promise<void> {
     const activeSessions =
       await this.sessionsRepository.countUserSessions(userId);
@@ -92,6 +94,7 @@ export class LoginUserUseCase
       deviceName,
       ipAddress: ip,
       expiresAt,
+      lastActive,
     };
     const createdSession = Session.create(createSessionDto);
     await this.sessionsRepository.save(createdSession);
