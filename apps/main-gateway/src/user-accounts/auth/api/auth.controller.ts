@@ -155,9 +155,12 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Logout user and terminate current session' })
   @UseGuards(RefreshTokenGuard)
-  @ApiNoContentConfiguredResponse()
-  @ApiUnauthorizedConfiguredResponse()
+  @ApiNoContentConfiguredResponse('Successfully logged out.')
+  @ApiUnauthorizedConfiguredResponse(
+    'Invalid, expired or missing refresh token. User not authenticated.',
+  )
   async logout(
     @CurrentSessionId() { sessionId }: UserInfoInputDto,
     @Res({ passthrough: true }) response: Response,

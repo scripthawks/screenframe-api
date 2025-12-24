@@ -12,7 +12,6 @@ export class UsersService {
   ) {}
 
   async create(cmd: CreateUserDto) {
-    // return 'This action adds a new user';
     if (!cmd.userName || !cmd.email || !cmd.password) {
       throw new Error(
         'Missing required fields: user_name, email, password_hash',
@@ -23,7 +22,6 @@ export class UsersService {
   }
 
   async findAll() {
-    // return `This action returns all users`;
     return await this.usersQRepository.findAll();
   }
 }

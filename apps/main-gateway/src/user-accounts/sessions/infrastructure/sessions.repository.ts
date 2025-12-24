@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { Session } from '../domain/session.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 
 @Injectable()
-export class SessionRepository {
+export class SessionsRepository {
   constructor(
     @InjectRepository(Session)
-    private readonly sessionRepository: Repository<Session>,
+    private readonly sessionsRepository: Repository<Session>,
   ) {}
 
   async save(session: Session) {
-    await this.sessionRepository.save(session);
+    await this.sessionsRepository.save(session);
   }
 
   async update(sessionId: string, updatedAt: Date) {
-    await this.sessionRepository.update({ id: sessionId }, { updatedAt });
+    await this.sessionsRepository.update({ id: sessionId }, { updatedAt });
   }
 
   async deactivateOldestUserSession(userId: string): Promise<Session | null> {
-    const oldestSession = await this.sessionRepository.findOne({
+    const oldestSession = await this.sessionsRepository.findOne({
       where: { userId, isActive: true },
       order: { createdAt: 'ASC' },
     });
@@ -28,13 +28,31 @@ export class SessionRepository {
 
     oldestSession.deactivate();
 
-    await this.sessionRepository.save(oldestSession);
+    await this.sessionsRepository.save(oldestSession);
     return oldestSession;
   }
 
   async deactivate(session: Session) {
     session.deactivate();
-    await this.sessionRepository.save(session);
+    await this.sessionsRepository.save(session);
+    return true;
+  }
+
+  async deleteById(session: Session) {
+    const result = await this.sessionsRepository.softRemove(session);
+    if (!result) return null;
+    return true;
+  }
+
+  async deleteExcludingCurrent(
+    currentUserId: string,
+    currentSessionId: string,
+  ) {
+    const devicesToDelete = await this.sessionsRepository.find({
+      where: { userId: currentUserId, id: Not(currentSessionId) },
+    });
+    const result = await this.sessionsRepository.softRemove(devicesToDelete);
+    if (!result) return null;
     return true;
   }
 
@@ -42,7 +60,7 @@ export class SessionRepository {
     userId: string,
     sessionId: string,
   ): Promise<Session | null> {
-    return this.sessionRepository.findOne({
+    return this.sessionsRepository.findOne({
       where: {
         userId,
         id: sessionId,
@@ -51,14 +69,14 @@ export class SessionRepository {
     });
   }
   async findById(sessionId: string) {
-    return await this.sessionRepository.findOne({
+    return await this.sessionsRepository.findOne({
       where: { id: sessionId },
       relations: { user: true },
     });
   }
 
   async countUserSessions(userId: string): Promise<number> {
-    return this.sessionRepository.count({
+    return this.sessionsRepository.count({
       where: {
         userId,
       },

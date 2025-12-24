@@ -22,7 +22,9 @@ export class SessionCleanupService {
     try {
       const expiredSessions = await this.sessionRepository
         .createQueryBuilder('session')
+        .withDeleted()
         .where('session.expiresAt < :now', { now: new Date() })
+        .orWhere('session.deletedAt IS NOT NULL')
         .select('session.id')
         .limit(this.userAccountConfig.SESSION_CLEANUP_BATCH_SIZE)
         .getMany();

@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { UserAccountConfig } from '../config/user-account.config';
-import { SessionRepository } from '../../sessions/infrastructure/session.repository';
+import { SessionsRepository } from '../../sessions/infrastructure/sessions.repository';
 import { JwtPayload } from '../../../core/strategies/jwt-access.strategy';
 import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
@@ -12,7 +12,7 @@ import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(
     userAccountConfig: UserAccountConfig,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionsRepository: SessionsRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -30,7 +30,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   }
 
   async validate(req: Request, payload: JwtPayload) {
-    const session = await this.sessionRepository.findByUserAndSessionId(
+    const session = await this.sessionsRepository.findByUserAndSessionId(
       payload.userId,
       payload.sessionId,
     );

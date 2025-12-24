@@ -27,17 +27,27 @@ import { LoginUserUseCase } from './auth/application/use-cases/login-user.use-ca
 import { AuthService } from './auth/application/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { GetInfoAboutCurrentUserQueryHandler } from './auth/application/queries/get-info-about-current-user.query';
-import { SessionRepository } from './sessions/infrastructure/session.repository';
+import { SessionsRepository } from './sessions/infrastructure/sessions.repository';
 import { Session } from './sessions/domain/session.entity';
 import { RefreshStrategy } from './core/strategies/refresh.stategy';
 import { RefreshTokenUseCase } from './auth/application/use-cases/refresh-token.use-case';
 import { SessionCleanupService } from './core/services/cleanup/session-cleanup.service';
 import { LogoutUseCase } from './auth/application/use-cases/logout.use-case';
+import { SessionsController } from './sessions/api/sessions.controller';
+import { GetSessionsQueryHandler } from './sessions/application/queries/get-sessions.query';
+import { SessionsQueryRepository } from './sessions/infrastructure/sessions.query-repository';
+import { DeleteAllSessionsExcludingCurrentUseCase } from './sessions/application/use-cases/delete-all-sessions-excluding-current.use-case';
+import { DeleteSessionUseCase } from './sessions/application/use-cases/delete-security-device.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
 const strategies = [LocalStrategy, RefreshStrategy, JwtStrategy];
-const controllers = [UsersController, PostsController, AuthController];
+const controllers = [
+  UsersController,
+  PostsController,
+  AuthController,
+  SessionsController,
+];
 const services = [
   JwtService,
   AuthService,
@@ -53,12 +63,15 @@ const useCases = [
   SignUpUseCase,
   VerifyEmailUseCase,
   ResendVerificationUseCase,
+  DeleteAllSessionsExcludingCurrentUseCase,
+  DeleteSessionUseCase,
 ];
-const queries = [GetInfoAboutCurrentUserQueryHandler];
+const queries = [GetInfoAboutCurrentUserQueryHandler, GetSessionsQueryHandler];
 const repositories = [
   UsersRepository,
   UsersQueryRepository,
-  SessionRepository,
+  SessionsRepository,
+  SessionsQueryRepository,
   PostsRepository,
   PostsQueryRepository,
 ];

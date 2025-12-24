@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { LoginSuccessViewDto } from '../../api/view-dto/login-success.view-dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserAccountConfig } from '../../../core/config/user-account.config';
-import { SessionRepository } from '../../../sessions/infrastructure/session.repository';
+import { SessionsRepository } from '../../../sessions/infrastructure/sessions.repository';
 import { JwtPayload } from 'apps/main-gateway/src/core/strategies/jwt-access.strategy';
 
 export class RefreshTokenCommand {
@@ -19,7 +19,7 @@ export class RefreshTokenUseCase
   constructor(
     private readonly userAccountConfig: UserAccountConfig,
     private readonly jwtService: JwtService,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionsRepository: SessionsRepository,
   ) {}
 
   async execute(command: RefreshTokenCommand): Promise<LoginSuccessViewDto> {
@@ -43,7 +43,7 @@ export class RefreshTokenUseCase
     );
     const decodePayload: JwtPayload = this.jwtService.decode(refreshToken);
     const updatedAt = new Date(decodePayload.iat * 1000);
-    await this.sessionRepository.update(command.sessionId, updatedAt);
+    await this.sessionsRepository.update(command.sessionId, updatedAt);
     return {
       accessToken,
       refreshToken,
