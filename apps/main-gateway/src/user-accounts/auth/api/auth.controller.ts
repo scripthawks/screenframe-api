@@ -17,7 +17,9 @@ import { VerifyEmailInputDto } from './input-dto/verify-email.input-dto';
 import {
   ApiBadRequestConfiguredResponse,
   ApiConflictConfiguredResponse,
+  ApiForbiddenConfiguredResponse,
   ApiNoContentConfiguredResponse,
+  ApiTooManyRequestsConfiguredResponse,
   ApiUnauthorizedConfiguredResponse,
 } from '@app/core/decorators/swagger';
 import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
@@ -41,6 +43,8 @@ import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-ab
 import { RefreshTokenGuard } from '../../core/guards/refresh-token.guard';
 import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-case';
 import { LogoutCommand } from '../application/use-cases/logout.use-case';
+import { PasswordRecoveryInputDto } from './input-dto/password-recovery.input-dto';
+import { PasswordRecoveryCommand } from '../application/use-cases/password-recovery.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -191,5 +195,30 @@ export class AuthController {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+  }
+
+  @Post('password-recovery')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary:
+      'Password recovery. Email with confirmation code will be send to passed email address',
+  })
+  @ApiNoContentConfiguredResponse(
+    'Password recovery link has been sent to the specified email',
+  )
+  @ApiBadRequestConfiguredResponse(
+    'Invalid email or reCAPTCHA verification failed',
+  )
+  @ApiForbiddenConfiguredResponse('Email not verified')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async passwordRecovery(
+    @Body() passwordRecoveryInputDto: PasswordRecoveryInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new PasswordRecoveryCommand(passwordRecoveryInputDto),
+    );
   }
 }

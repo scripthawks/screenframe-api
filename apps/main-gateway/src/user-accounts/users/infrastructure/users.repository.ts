@@ -34,12 +34,17 @@ export class UsersRepository {
   async findByEmailOrFail(email: string): Promise<User> {
     const foundUser = await this.usersRepository.findOne({
       where: { email: email },
-      relations: { emailConfirmation: true },
+      relations: {
+        emailConfirmation: true,
+        passwordRecovery: true,
+        sessions: true,
+      },
     });
     if (!foundUser) {
       throw new RepositoryException(
         CommonExceptionCodes.BAD_REQUEST,
-        'User with this email does not exist',
+        'Email is invalid',
+        [{ key: 'field', message: 'email' }],
       );
     }
     return foundUser;

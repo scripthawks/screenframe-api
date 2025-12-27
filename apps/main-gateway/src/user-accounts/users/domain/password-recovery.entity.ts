@@ -45,6 +45,14 @@ export class PasswordRecovery extends BaseWithUuidIdEntity {
     this.updatedAt = new Date();
   }
 
+  renewToken(uuidProvider: UuidProvider): PasswordRecovery {
+    this.recoveryToken = uuidProvider.generate();
+    this.expiresAt = new Date(Date.now() + PASSWORD_RECOVERY_TOKEN_EXPIRY);
+    this.isUsed = false;
+    this.updatedAt = new Date();
+    return this;
+  }
+
   confirm(): PasswordRecovery {
     if (this.isUsed) {
       throw new DomainException(
