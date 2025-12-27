@@ -37,8 +37,7 @@ export class PasswordRecoveryTemplate {
                   <strong>⚠️ Security Notice:</strong>
                   This password reset link will expire in <strong>${expirationText}</strong>.<br>
                   Please do not share this link with anyone.<br>
-                  If you didn't request a password reset, please ignore this email.<br>
-                  All your active sessions will be terminated when you reset your password.<br>
+                  If you didn't request a password reset, please ignore this email.
               </div>
           </div>
       </body>

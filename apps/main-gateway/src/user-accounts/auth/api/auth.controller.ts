@@ -47,6 +47,8 @@ import { PasswordRecoveryInputDto } from './input-dto/password-recovery.input-dt
 import { PasswordRecoveryCommand } from '../application/use-cases/password-recovery.use-case';
 import { CheckRecoveryTokenInputDto } from './input-dto/check-recovery-token.input-dto';
 import { CheckRecoveryTokenCommand } from '../application/use-cases/check-recovery-token.use-case';
+import { PasswordRecoveryResendingInputDto } from './input-dto/password-recovery-resending.input-dto';
+import { PasswordRecoveryResendingCommand } from '../application/use-cases/password-recovery-resending.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -240,6 +242,30 @@ export class AuthController {
   ): Promise<void> {
     await this.commandBus.execute(
       new CheckRecoveryTokenCommand(checkRecoveryTokenInputDto),
+    );
+  }
+
+  @Post('password-recovery-resending')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary:
+      'Resend password recovery link. Email with confirmation code will be send to passed email address',
+  })
+  @ApiNoContentConfiguredResponse(
+    'Password recovery link has been sent to the specified email',
+  )
+  @ApiBadRequestConfiguredResponse('Invalid email')
+  @ApiForbiddenConfiguredResponse('Email not verified')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async passwordRecoveryResending(
+    @Body()
+    passwordRecoveryResendingInputDto: PasswordRecoveryResendingInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new PasswordRecoveryResendingCommand(passwordRecoveryResendingInputDto),
     );
   }
 }
