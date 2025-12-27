@@ -42,6 +42,7 @@ import {
   THROTTLER_AUTH_NAME,
   THROTTLER_AUTH_TTL,
 } from './core/constants/dto.constants';
+import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-recovery-token.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -64,6 +65,7 @@ const useCases = [
   VerifyEmailUseCase,
   ResendVerificationUseCase,
   PasswordRecoveryUseCase,
+  CheckRecoveryTokenUseCase,
 ];
 const queries = [GetInfoAboutCurrentUserQueryHandler];
 const repositories = [

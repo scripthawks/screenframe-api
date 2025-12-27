@@ -45,6 +45,8 @@ import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-
 import { LogoutCommand } from '../application/use-cases/logout.use-case';
 import { PasswordRecoveryInputDto } from './input-dto/password-recovery.input-dto';
 import { PasswordRecoveryCommand } from '../application/use-cases/password-recovery.use-case';
+import { CheckRecoveryTokenInputDto } from './input-dto/check-recovery-token.input-dto';
+import { CheckRecoveryTokenCommand } from '../application/use-cases/check-recovery-token.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -219,6 +221,25 @@ export class AuthController {
   ): Promise<void> {
     await this.commandBus.execute(
       new PasswordRecoveryCommand(passwordRecoveryInputDto),
+    );
+  }
+
+  @Post('check-recovery-token')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary: 'Check recovery token',
+  })
+  @ApiNoContentConfiguredResponse('Recovery token is valid')
+  @ApiBadRequestConfiguredResponse('Invalid or expired recovery token')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async checkRecoveryToken(
+    @Body() checkRecoveryTokenInputDto: CheckRecoveryTokenInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new CheckRecoveryTokenCommand(checkRecoveryTokenInputDto),
     );
   }
 }

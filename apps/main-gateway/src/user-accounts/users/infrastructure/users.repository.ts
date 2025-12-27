@@ -58,4 +58,18 @@ export class UsersRepository {
       relations: { emailConfirmation: true },
     });
   }
+
+  async findByRecoveryTokenOrFail(recoveryToken: string): Promise<User> {
+    const foundUser = await this.usersRepository.findOne({
+      where: { passwordRecovery: { recoveryToken } },
+      relations: { passwordRecovery: true },
+    });
+    if (!foundUser) {
+      throw new RepositoryException(
+        CommonExceptionCodes.BAD_REQUEST,
+        'Recovery token is invalid',
+      );
+    }
+    return foundUser;
+  }
 }
