@@ -32,18 +32,6 @@ pipeline {
                     }
                 }
         }
-        stage('Run Database Migrations') {
-                steps {
-                    script {
-                        sh '''
-                           export NVM_DIR="$HOME/.nvm"
-                           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                           nvm use --lts
-                           yarn migration:main-gateway:prod:run
-                        '''
-                    }
-                }
-        }
         stage('Unit tests') {
             steps {
                 script {
