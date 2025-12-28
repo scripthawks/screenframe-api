@@ -36,7 +36,7 @@ import { ResponseAccessTokenDto } from './view-dto/response-access-token.view-dt
 import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
 import { Request as ExpressRequest, Response } from 'express';
-import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CurrentSessionId, CurrentUserId } from '@app/core/decorators/params';
 import { MeViewDto } from './view-dto/me.view-dto';
 import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-about-current-user.query';
