@@ -17,7 +17,9 @@ import { VerifyEmailInputDto } from './input-dto/verify-email.input-dto';
 import {
   ApiBadRequestConfiguredResponse,
   ApiConflictConfiguredResponse,
+  ApiForbiddenConfiguredResponse,
   ApiNoContentConfiguredResponse,
+  ApiTooManyRequestsConfiguredResponse,
   ApiUnauthorizedConfiguredResponse,
 } from '@app/core/decorators/swagger';
 import { PasswordConfirmationGuard } from './guards/confirmation-password.guard';
@@ -34,13 +36,21 @@ import { ResponseAccessTokenDto } from './view-dto/response-access-token.view-dt
 import { LoginSuccessViewDto } from './view-dto/login-success.view-dto';
 import { LoginUserCommand } from '../application/use-cases/login-user.use-case';
 import { Request as ExpressRequest, Response } from 'express';
-import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CurrentSessionId, CurrentUserId } from '@app/core/decorators/params';
 import { MeViewDto } from './view-dto/me.view-dto';
 import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-about-current-user.query';
 import { RefreshTokenGuard } from '../../core/guards/refresh-token.guard';
 import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-case';
 import { LogoutCommand } from '../application/use-cases/logout.use-case';
+import { PasswordRecoveryInputDto } from './input-dto/password-recovery.input-dto';
+import { PasswordRecoveryCommand } from '../application/use-cases/password-recovery.use-case';
+import { CheckRecoveryTokenInputDto } from './input-dto/check-recovery-token.input-dto';
+import { CheckRecoveryTokenCommand } from '../application/use-cases/check-recovery-token.use-case';
+import { PasswordRecoveryResendingInputDto } from './input-dto/password-recovery-resending.input-dto';
+import { PasswordRecoveryResendingCommand } from '../application/use-cases/password-recovery-resending.use-case';
+import { NewPasswordInputDto } from './input-dto/new-password.input-dto';
+import { NewPasswordCommand } from '../application/use-cases/new-password.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -191,5 +201,91 @@ export class AuthController {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+  }
+
+  @Post('password-recovery')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary:
+      'Password recovery. Email with confirmation code will be send to passed email address',
+  })
+  @ApiNoContentConfiguredResponse(
+    'Password recovery link has been sent to the specified email',
+  )
+  @ApiBadRequestConfiguredResponse(
+    'Invalid email or reCAPTCHA verification failed',
+  )
+  @ApiForbiddenConfiguredResponse('Email not verified')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async passwordRecovery(
+    @Body() passwordRecoveryInputDto: PasswordRecoveryInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new PasswordRecoveryCommand(passwordRecoveryInputDto),
+    );
+  }
+
+  @Post('check-recovery-token')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary: 'Check recovery token',
+  })
+  @ApiNoContentConfiguredResponse('Recovery token is valid')
+  @ApiBadRequestConfiguredResponse('Invalid or expired recovery token')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async checkRecoveryToken(
+    @Body() checkRecoveryTokenInputDto: CheckRecoveryTokenInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new CheckRecoveryTokenCommand(checkRecoveryTokenInputDto),
+    );
+  }
+
+  @Post('password-recovery-resending')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary:
+      'Resend password recovery link. Email with confirmation code will be send to passed email address',
+  })
+  @ApiNoContentConfiguredResponse(
+    'Password recovery link has been sent to the specified email',
+  )
+  @ApiBadRequestConfiguredResponse('Invalid email')
+  @ApiForbiddenConfiguredResponse('Email not verified')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async passwordRecoveryResending(
+    @Body()
+    passwordRecoveryResendingInputDto: PasswordRecoveryResendingInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(
+      new PasswordRecoveryResendingCommand(passwordRecoveryResendingInputDto),
+    );
+  }
+
+  @Post('new-password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary: 'Sets new password, deactivates all user sessions',
+  })
+  @ApiNoContentConfiguredResponse('Password successfully changed')
+  @ApiBadRequestConfiguredResponse('Invalid or expired recovery token')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async newPassword(
+    @Body()
+    newPasswordInputDto: NewPasswordInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(new NewPasswordCommand(newPasswordInputDto));
   }
 }

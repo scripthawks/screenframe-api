@@ -33,6 +33,18 @@ import { RefreshStrategy } from './core/strategies/refresh.stategy';
 import { RefreshTokenUseCase } from './auth/application/use-cases/refresh-token.use-case';
 import { SessionCleanupService } from './core/services/cleanup/session-cleanup.service';
 import { LogoutUseCase } from './auth/application/use-cases/logout.use-case';
+import { PasswordRecovery } from './users/domain/password-recovery.entity';
+import { PasswordRecoveryUseCase } from './auth/application/use-cases/password-recovery.use-case';
+import { RecaptchaService } from './auth/application/services/recaptcha.service';
+import { HttpModule } from '@nestjs/axios';
+import {
+  THROTTLER_AUTH_LIMIT,
+  THROTTLER_AUTH_NAME,
+  THROTTLER_AUTH_TTL,
+} from './core/constants/dto.constants';
+import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-recovery-token.use-case';
+import { PasswordRecoveryResendingUseCase } from './auth/application/use-cases/password-recovery-resending.use-case';
+import { NewPasswordUseCase } from './auth/application/use-cases/new-password.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -45,6 +57,7 @@ const services = [
   SessionCleanupService,
   UsersService,
   PostsService,
+  RecaptchaService,
 ];
 const useCases = [
   RefreshTokenUseCase,
@@ -53,6 +66,10 @@ const useCases = [
   SignUpUseCase,
   VerifyEmailUseCase,
   ResendVerificationUseCase,
+  PasswordRecoveryUseCase,
+  CheckRecoveryTokenUseCase,
+  PasswordRecoveryResendingUseCase,
+  NewPasswordUseCase,
 ];
 const queries = [GetInfoAboutCurrentUserQueryHandler];
 const repositories = [
@@ -65,16 +82,22 @@ const repositories = [
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, EmailConfirmation, Session]),
+    TypeOrmModule.forFeature([
+      User,
+      EmailConfirmation,
+      Session,
+      PasswordRecovery,
+    ]),
     CqrsModule,
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
-        name: 'auth',
-        ttl: 10000,
-        limit: 5,
+        name: THROTTLER_AUTH_NAME,
+        ttl: THROTTLER_AUTH_TTL,
+        limit: THROTTLER_AUTH_LIMIT,
       },
     ]),
+    HttpModule,
   ],
   controllers: [...controllers],
   providers: [

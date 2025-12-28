@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BaseConfig } from '@app/core/config';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @Injectable()
 export class UserAccountConfig extends BaseConfig {
@@ -61,6 +61,16 @@ export class UserAccountConfig extends BaseConfig {
   )
   SESSION_CLEANUP_BATCH_SIZE: number;
 
+  @IsNotEmpty({ message: 'Set Env variable RECAPTCHA_URL, GROUP: RECAPTCHA' })
+  @IsString()
+  RECAPTCHA_URL: string;
+
+  @IsNotEmpty({
+    message: 'Set Env variable RECAPTCHA_SECRET_KEY, GROUP: RECAPTCHA',
+  })
+  @IsString()
+  RECAPTCHA_SECRET_KEY: string;
+
   constructor(private configService: ConfigService) {
     super();
 
@@ -91,6 +101,12 @@ export class UserAccountConfig extends BaseConfig {
 
     this.SESSION_CLEANUP_BATCH_SIZE = Number(
       this.configService.getOrThrow('SESSION_CLEANUP_BATCH_SIZE'),
+    );
+
+    this.RECAPTCHA_URL = this.configService.getOrThrow('RECAPTCHA_URL');
+
+    this.RECAPTCHA_SECRET_KEY = this.configService.getOrThrow(
+      'RECAPTCHA_SECRET_KEY',
     );
 
     this.validateConfig();

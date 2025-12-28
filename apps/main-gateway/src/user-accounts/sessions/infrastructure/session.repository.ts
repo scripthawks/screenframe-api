@@ -50,6 +50,16 @@ export class SessionRepository {
       },
     });
   }
+
+  async findActiveSessionsByUserId(userId: string): Promise<Session[]> {
+    return this.sessionRepository.find({
+      where: {
+        userId,
+        isActive: true,
+      },
+    });
+  }
+
   async findById(sessionId: string) {
     return await this.sessionRepository.findOne({
       where: { id: sessionId },
