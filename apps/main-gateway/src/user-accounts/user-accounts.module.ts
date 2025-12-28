@@ -44,6 +44,7 @@ import {
 } from './core/constants/dto.constants';
 import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-recovery-token.use-case';
 import { PasswordRecoveryResendingUseCase } from './auth/application/use-cases/password-recovery-resending.use-case';
+import { NewPasswordUseCase } from './auth/application/use-cases/new-password.use-case';
 
 const configs = [UserAccountConfig];
 const adapters = [ArgonHasher];
@@ -68,6 +69,7 @@ const useCases = [
   PasswordRecoveryUseCase,
   CheckRecoveryTokenUseCase,
   PasswordRecoveryResendingUseCase,
+  NewPasswordUseCase,
 ];
 const queries = [GetInfoAboutCurrentUserQueryHandler];
 const repositories = [

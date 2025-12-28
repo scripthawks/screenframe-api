@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { EmailConfirmationTemplate } from '../templates/email-confirmation.template';
 import { PasswordRecoveryTemplate } from '../templates/password-recovery.template';
+import { NewPasswordTemplate } from '../templates/new-password.template';
 
 @Injectable()
 export class MailService {
@@ -9,6 +10,7 @@ export class MailService {
     private readonly mailService: MailerService,
     private readonly emailConfirmationTemplate: EmailConfirmationTemplate,
     private readonly passwordRecoveryTemplate: PasswordRecoveryTemplate,
+    private readonly newPasswordTemplate: NewPasswordTemplate,
   ) {}
   async sendSignUpEmail(
     userName: string,
@@ -32,6 +34,18 @@ export class MailService {
     await this.mailService.sendMail({
       to: email,
       subject: `Welcome ${userName}! Confirm your password recovery`,
+      html: htmlContent,
+    });
+  }
+
+  async sendPasswordChangedNotification(
+    userName: string,
+    email: string,
+  ): Promise<void> {
+    const htmlContent = this.newPasswordTemplate.render(userName);
+    await this.mailService.sendMail({
+      to: email,
+      subject: `Welcome ${userName}! Your password has been changed`,
       html: htmlContent,
     });
   }

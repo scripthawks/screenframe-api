@@ -8,6 +8,8 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { EmailConfirmationTemplate } from './mail/templates/email-confirmation.template';
 import { SendEmailWithRecoveryTokenEventHandler } from './mail/event-handlers/send-email-with-recovery-token.event-handler';
 import { PasswordRecoveryTemplate } from './mail/templates/password-recovery.template';
+import { SendPasswordChangedNotificationEventHandler } from './mail/event-handlers/send-password-changed-notification.event-handler';
+import { NewPasswordTemplate } from './mail/templates/new-password.template';
 
 @Module({
   providers: [NotificationConfig],
@@ -19,8 +21,13 @@ const services = [MailService];
 const eventHandlers = [
   SendSignUpConfirmationEmailEventHandler,
   SendEmailWithRecoveryTokenEventHandler,
+  SendPasswordChangedNotificationEventHandler,
 ];
-const templates = [EmailConfirmationTemplate, PasswordRecoveryTemplate];
+const templates = [
+  EmailConfirmationTemplate,
+  PasswordRecoveryTemplate,
+  NewPasswordTemplate,
+];
 
 @Module({
   imports: [

@@ -49,6 +49,8 @@ import { CheckRecoveryTokenInputDto } from './input-dto/check-recovery-token.inp
 import { CheckRecoveryTokenCommand } from '../application/use-cases/check-recovery-token.use-case';
 import { PasswordRecoveryResendingInputDto } from './input-dto/password-recovery-resending.input-dto';
 import { PasswordRecoveryResendingCommand } from '../application/use-cases/password-recovery-resending.use-case';
+import { NewPasswordInputDto } from './input-dto/new-password.input-dto';
+import { NewPasswordCommand } from '../application/use-cases/new-password.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -267,5 +269,23 @@ export class AuthController {
     await this.commandBus.execute(
       new PasswordRecoveryResendingCommand(passwordRecoveryResendingInputDto),
     );
+  }
+
+  @Post('new-password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(ThrottlerGuard)
+  @ApiOperation({
+    summary: 'Sets new password, deactivates all user sessions',
+  })
+  @ApiNoContentConfiguredResponse('Password successfully changed')
+  @ApiBadRequestConfiguredResponse('Invalid or expired recovery token')
+  @ApiTooManyRequestsConfiguredResponse(
+    'Too many attempts. Please repeat later',
+  )
+  async newPassword(
+    @Body()
+    newPasswordInputDto: NewPasswordInputDto,
+  ): Promise<void> {
+    await this.commandBus.execute(new NewPasswordCommand(newPasswordInputDto));
   }
 }

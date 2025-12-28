@@ -58,12 +58,14 @@ export class PasswordRecovery extends BaseWithUuidIdEntity {
       throw new DomainException(
         CommonExceptionCodes.BAD_REQUEST,
         'Password recovery token already used',
+        [{ key: 'field', message: 'recoveryToken' }],
       );
     }
     if (this.expiresAt < new Date()) {
       throw new DomainException(
         CommonExceptionCodes.BAD_REQUEST,
         'Password recovery token expired',
+        [{ key: 'field', message: 'recoveryToken' }],
       );
     }
     this.isUsed = true;
