@@ -16,24 +16,33 @@ export class SignUpCommand {
 @CommandHandler(SignUpCommand)
 export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
   constructor(
-    private readonly userRepo: UsersRepository,
-    private readonly hashAdapter: ArgonHasher,
+    private readonly usersRepository: UsersRepository,
+    private readonly argonHasher: ArgonHasher,
     private readonly uuidProvider: UuidProvider,
     private readonly eventBus: EventBus,
     private readonly userAccountConfig: UserAccountConfig,
   ) {}
 
   async execute({ userDto: { userName, password, email } }: SignUpCommand) {
-    const isUserExist = await this.userRepo.findByUserNameOrEmail(
-      userName,
-      email,
-    );
+    const [userByUserName, userByEmail] = await Promise.all([
+      this.usersRepository.findByUserName(userName),
+      this.usersRepository.findByEmail(email),
+    ]);
+
+    const isUserExist = userByUserName || userByEmail;
 
     if (isUserExist) {
-      if (isUserExist.userName === userName || isUserExist.email === email) {
+      if (isUserExist.email === email) {
         throw new DomainException(
           CommonExceptionCodes.CONFLICT,
-          'User already exists',
+          'User with this email is already registered',
+        );
+      }
+
+      if (isUserExist.userName === userName) {
+        throw new DomainException(
+          CommonExceptionCodes.CONFLICT,
+          'User with this username is already registered',
         );
       }
     }
@@ -42,7 +51,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
   }
 
   private async createUser(userName: string, password: string, email: string) {
-    const passwordHash = await this.hashAdapter.generateHash(password);
+    const passwordHash = await this.argonHasher.generateHash(password);
 
     const user = User.createWithConfirmation(
       { userName, email, password: passwordHash },
@@ -50,7 +59,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
       this.userAccountConfig.CONFIRMATION_TOKEN_EXPIRATION,
     );
 
-    await this.userRepo.save(user);
+    await this.usersRepository.save(user);
 
     this.createUserEvent(
       userName,

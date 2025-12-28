@@ -1,10 +1,12 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { UserRoleEnum } from '../api/enums/user-role.enum';
-import { CreateUserDto } from './dto/user/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { BaseWithUuidIdEntity } from '@app/core/entities';
 import { CreateUserInputDto } from '../api/input-dto/create-user.input-dto';
 import { UuidProvider } from '../../core/helpers/uuid.provider';
 import { EmailConfirmation } from './emailConfirmation.entity';
+import { Session } from '../../sessions/domain/session.entity';
+import { PasswordRecovery } from './password-recovery.entity';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })
@@ -31,6 +33,16 @@ export class User extends BaseWithUuidIdEntity {
     { onDelete: 'CASCADE', cascade: true },
   )
   emailConfirmation: EmailConfirmation;
+
+  @OneToMany(() => Session, (session) => session.user, { onDelete: 'CASCADE' })
+  sessions: Session[];
+
+  @OneToOne(
+    () => PasswordRecovery,
+    (passwordRecovery) => passwordRecovery.user,
+    { onDelete: 'CASCADE', cascade: true },
+  )
+  passwordRecovery: PasswordRecovery;
 
   static create(dto: CreateUserDto): User {
     const user = new User();
