@@ -13,7 +13,7 @@
     "build:main-gateway": "nest build main-gateway",
     "start:main-gateway:dev": "cross-env NODE_ENV=development nest start main-gateway --watch",
     "start:main-gateway:debug": "cross-env NODE_ENV=development nest start main-gateway --debug --watch",
-    "start:main-gateway:prod": "cross-env NODE_ENV=production node dist/apps/main-gateway/main.js",
+    "start:main-gateway:prod": "cross-env NODE_ENV=development node dist/apps/main-gateway/main.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
