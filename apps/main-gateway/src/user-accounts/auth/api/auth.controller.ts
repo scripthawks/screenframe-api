@@ -41,6 +41,8 @@ import { GetInfoAboutCurrentUserQuery } from '../application/queries/get-info-ab
 import { RefreshTokenGuard } from '../../core/guards/refresh-token.guard';
 import { RefreshTokenCommand } from '../application/use-cases/refresh-token.use-case';
 import { LogoutCommand } from '../application/use-cases/logout.use-case';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from '../../users/domain/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -120,7 +122,7 @@ export class AuthController {
 
     const { accessToken, refreshToken } = result;
 
-    this.setCookieInResponse(refreshToken, response);
+    this.setRefreshTokenCookie(refreshToken, response);
 
     return new ResponseAccessTokenDto(accessToken);
   }
@@ -148,7 +150,7 @@ export class AuthController {
 
     const { accessToken, refreshToken } = result;
 
-    this.setCookieInResponse(refreshToken, response);
+    this.setRefreshTokenCookie(refreshToken, response);
 
     return new ResponseAccessTokenDto(accessToken);
   }
@@ -187,8 +189,38 @@ export class AuthController {
     );
   }
 
-  private setCookieInResponse(refreshToken: string, response: Response) {
-    return response.cookie('refreshToken', refreshToken, {
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async githubAuth() {}
+
+  @Get('github/redirect')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard('github'))
+  async githubAuthRedirect(
+    @Req() req: ExpressRequest,
+    @Res() response: Response,
+  ) {
+    const user = req.user as User;
+    if (!user) {
+      console.error('User not found in request!');
+      throw new Error('Authentication failed: user not found');
+    }
+
+    const ip = req.ip;
+    const deviceName = req.headers['user-agent'];
+
+    const result: LoginSuccessViewDto = await this.commandBus.execute(
+      new LoginUserCommand(user.id, ip, deviceName),
+    );
+
+    const { refreshToken } = result;
+
+    this.setRefreshTokenCookie(refreshToken, response);
+    response.redirect('http://localhost:4010/api/v1/sessions');
+  }
+
+  private setRefreshTokenCookie(refreshToken: string, response: Response) {
+    response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',

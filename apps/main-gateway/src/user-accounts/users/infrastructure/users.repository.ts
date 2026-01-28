@@ -19,6 +19,16 @@ export class UsersRepository {
     await this.usersRepository.save(user);
   }
 
+  async createUserOAuth(username: string, email: string): Promise<User> {
+    const user = User.create({
+      userName: username,
+      email,
+      password: '',
+    });
+
+    return await this.usersRepository.save(user);
+  }
+
   async findByUserName(userName: string) {
     return await this.usersRepository.findOne({
       where: [{ userName: userName }],
@@ -52,5 +62,9 @@ export class UsersRepository {
       where: { emailConfirmation: { confirmationToken: confirmationToken } },
       relations: { emailConfirmation: true },
     });
+  }
+
+  async updateEmailConfirmationStatus(userId: string): Promise<void> {
+    await this.usersRepository.update(userId, { isVerified: true });
   }
 }

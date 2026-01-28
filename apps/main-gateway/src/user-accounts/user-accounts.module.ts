@@ -38,10 +38,20 @@ import { GetSessionsQueryHandler } from './sessions/application/queries/get-sess
 import { SessionsQueryRepository } from './sessions/infrastructure/sessions.query-repository';
 import { DeleteAllSessionsExcludingCurrentUseCase } from './sessions/application/use-cases/delete-all-sessions-excluding-current.use-case';
 import { DeleteSessionUseCase } from './sessions/application/use-cases/delete-security-device.use-case';
+import { Provider } from './users/domain/provider.entity';
+import { GithubStrategy } from './core/strategies/github.strategy';
+import { ProvidersRepository } from './users/infrastructure/providers.repository';
+import { NotificationConfig } from '../notifications/core/config/notification.config';
+import { CoreConfig } from '@app/core/config';
 
-const configs = [UserAccountConfig];
+const configs = [UserAccountConfig, NotificationConfig, CoreConfig];
 const adapters = [ArgonHasher];
-const strategies = [LocalStrategy, RefreshStrategy, JwtStrategy];
+const strategies = [
+  LocalStrategy,
+  RefreshStrategy,
+  JwtStrategy,
+  GithubStrategy,
+];
 const controllers = [
   UsersController,
   PostsController,
@@ -70,6 +80,7 @@ const queries = [GetInfoAboutCurrentUserQueryHandler, GetSessionsQueryHandler];
 const repositories = [
   UsersRepository,
   UsersQueryRepository,
+  ProvidersRepository,
   SessionsRepository,
   SessionsQueryRepository,
   PostsRepository,
@@ -78,7 +89,7 @@ const repositories = [
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, EmailConfirmation, Session]),
+    TypeOrmModule.forFeature([User, EmailConfirmation, Provider, Session]),
     CqrsModule,
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
