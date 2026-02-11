@@ -12,12 +12,17 @@ export interface TestAppResult {
 }
 
 export class TestAppFactory {
-  static async createE2E(): Promise<TestAppResult> {
+  static async createE2E(
+    mocks: Array<{ provide: any; useValue: any }> = [],
+  ): Promise<TestAppResult> {
     const testingModuleBuilder: TestingModuleBuilder = Test.createTestingModule(
       {
         imports: [MainModule],
       },
     );
+    mocks.forEach(({ provide, useValue }) => {
+      testingModuleBuilder.overrideProvider(provide).useValue(useValue);
+    });
     const module = await testingModuleBuilder.compile();
     const app: INestApplication<App> = module.createNestApplication();
     const coreConfig = app.get<CoreConfig>(CoreConfig);
