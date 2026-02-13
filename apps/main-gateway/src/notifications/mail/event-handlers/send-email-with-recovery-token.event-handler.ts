@@ -7,12 +7,8 @@ export class SendEmailWithRecoveryTokenEventHandler
   implements IEventHandler<PasswordRecoveryRequestedEvent>
 {
   constructor(private readonly mailService: MailService) {}
-  async handle(event: PasswordRecoveryRequestedEvent): Promise<void> {
+  handle(event: PasswordRecoveryRequestedEvent): void {
     const { userName, recoveryToken, email } = event;
-    await this.mailService.sendPasswordRecoveryEmail(
-      userName,
-      recoveryToken,
-      email,
-    );
+    this.mailService.sendPasswordRecoveryEmail(userName, recoveryToken, email);
   }
 }

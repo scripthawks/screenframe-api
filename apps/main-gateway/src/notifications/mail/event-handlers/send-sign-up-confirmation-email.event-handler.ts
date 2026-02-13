@@ -7,8 +7,8 @@ export class SendSignUpConfirmationEmailEventHandler
   implements IEventHandler<UserSignUpEvent>
 {
   constructor(private readonly mailService: MailService) {}
-  async handle(event: UserSignUpEvent): Promise<void> {
+  handle(event: UserSignUpEvent): void {
     const { userName, email, confirmationToken } = event;
-    await this.mailService.sendSignUpEmail(userName, email, confirmationToken);
+    this.mailService.sendSignUpEmail(userName, email, confirmationToken);
   }
 }

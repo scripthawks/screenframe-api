@@ -7,8 +7,8 @@ export class SendPasswordChangedNotificationEventHandler
   implements IEventHandler<NewPasswordEvent>
 {
   constructor(private readonly mailService: MailService) {}
-  async handle(event: NewPasswordEvent): Promise<void> {
+  handle(event: NewPasswordEvent): void {
     const { userName, email } = event;
-    await this.mailService.sendPasswordChangedNotification(userName, email);
+    this.mailService.sendPasswordChangedNotification(userName, email);
   }
 }
