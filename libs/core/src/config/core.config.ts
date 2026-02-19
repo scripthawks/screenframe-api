@@ -56,6 +56,13 @@ export class CoreConfig extends BaseConfig {
   })
   IS_DB_LOGGING: boolean;
 
+  @IsNotEmpty({
+    message:
+      'Set Env variable CORS_ORIGINS to enable/disable, available values: true, false, 1, 0, GROUP: Dangerous!',
+  })
+  @IsString()
+  CORS_ORIGINS: string;
+
   constructor(private configService: ConfigService) {
     super();
     this.ENV = this.configService.getOrThrow('NODE_ENV');
@@ -72,6 +79,7 @@ export class CoreConfig extends BaseConfig {
     this.IS_DB_LOGGING = configValidationUtility.convertToBoolean(
       this.configService.getOrThrow('IS_DB_LOGGING'),
     );
+    this.CORS_ORIGINS = this.configService.getOrThrow('CORS_ORIGINS');
 
     this.validateConfig();
   }

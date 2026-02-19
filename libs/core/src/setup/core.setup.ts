@@ -11,7 +11,7 @@ import { CoreConfig } from '../config';
 
 export function coreSetup(app: INestApplication, coreConfig: CoreConfig) {
   globalPrefixSetup(app, coreConfig);
-  enableCorsSetup(app);
+  enableCorsSetup(app, coreConfig);
   cookieParserSetup(app);
   pipesSetup(app);
   swaggerSetup(app, coreConfig);
