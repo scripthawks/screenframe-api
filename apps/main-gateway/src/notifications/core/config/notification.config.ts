@@ -41,6 +41,12 @@ export class NotificationConfig extends BaseConfig {
   })
   IZ_MAILER_TLS_VERIFICATION: boolean;
 
+  @IsNotEmpty({
+    message: 'Set Env variable PASSWORD_RECOVERY_PATH, GROUP: MAIL',
+  })
+  @IsString()
+  PASSWORD_RECOVERY_PATH: string;
+
   constructor(private configService: ConfigService) {
     super();
     this.CLIENT_URL = this.configService.getOrThrow('CLIENT_URL');
@@ -51,6 +57,10 @@ export class NotificationConfig extends BaseConfig {
     this.IZ_MAILER_TLS_VERIFICATION = configValidationUtility.convertToBoolean(
       this.configService.getOrThrow('IZ_MAILER_TLS_VERIFICATION'),
     );
+    this.PASSWORD_RECOVERY_PATH = this.configService.getOrThrow(
+      'PASSWORD_RECOVERY_PATH',
+    );
+
     this.validateConfig();
   }
 }

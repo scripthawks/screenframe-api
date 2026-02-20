@@ -43,6 +43,18 @@ import { GithubStrategy } from './core/strategies/github.strategy';
 import { ProvidersRepository } from './users/infrastructure/providers.repository';
 import { NotificationConfig } from '../notifications/core/config/notification.config';
 import { CoreConfig } from '@app/core/config';
+import { PasswordRecovery } from './users/domain/password-recovery.entity';
+import { PasswordRecoveryUseCase } from './auth/application/use-cases/password-recovery.use-case';
+import { RecaptchaService } from './auth/application/services/recaptcha.service';
+import { HttpModule } from '@nestjs/axios';
+import {
+  THROTTLER_AUTH_LIMIT,
+  THROTTLER_AUTH_NAME,
+  THROTTLER_AUTH_TTL,
+} from './core/constants/dto.constants';
+import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-recovery-token.use-case';
+import { PasswordRecoveryResendingUseCase } from './auth/application/use-cases/password-recovery-resending.use-case';
+import { NewPasswordUseCase } from './auth/application/use-cases/new-password.use-case';
 
 const configs = [UserAccountConfig, NotificationConfig, CoreConfig];
 const adapters = [ArgonHasher];
@@ -65,6 +77,7 @@ const services = [
   SessionCleanupService,
   UsersService,
   PostsService,
+  RecaptchaService,
 ];
 const useCases = [
   RefreshTokenUseCase,
@@ -75,6 +88,10 @@ const useCases = [
   ResendVerificationUseCase,
   DeleteAllSessionsExcludingCurrentUseCase,
   DeleteSessionUseCase,
+  PasswordRecoveryUseCase,
+  CheckRecoveryTokenUseCase,
+  PasswordRecoveryResendingUseCase,
+  NewPasswordUseCase,
 ];
 const queries = [GetInfoAboutCurrentUserQueryHandler, GetSessionsQueryHandler];
 const repositories = [
@@ -90,15 +107,22 @@ const repositories = [
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, EmailConfirmation, Provider, Session]),
+    TypeOrmModule.forFeature([
+      User,
+      EmailConfirmation,
+      Session,
+      PasswordRecovery,
+    ]),
     CqrsModule,
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
-        name: 'auth',
-        ttl: 10000,
-        limit: 5,
+        name: THROTTLER_AUTH_NAME,
+        ttl: THROTTLER_AUTH_TTL,
+        limit: THROTTLER_AUTH_LIMIT,
       },
     ]),
+    HttpModule,
   ],
   controllers: [...controllers],
   providers: [

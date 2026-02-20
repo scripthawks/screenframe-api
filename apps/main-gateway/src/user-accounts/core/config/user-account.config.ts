@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+<<<<<<< HEAD
 import { BaseConfig, CoreConfig } from '@app/core/config';
 import { IsNumber, IsString } from 'class-validator';
 import { NotificationConfig } from 'apps/main-gateway/src/notifications/core/config/notification.config';
+=======
+import { BaseConfig } from '@app/core/config';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+>>>>>>> dev
 
 @Injectable()
 export class UserAccountConfig extends BaseConfig {
@@ -62,6 +67,7 @@ export class UserAccountConfig extends BaseConfig {
   )
   SESSION_CLEANUP_BATCH_SIZE: number;
 
+<<<<<<< HEAD
   @IsString({
     message: 'Set Env variable GITHUB_CLIENT_ID for OAuth',
   })
@@ -84,6 +90,19 @@ export class UserAccountConfig extends BaseConfig {
     private readonly notificationConfig: NotificationConfig,
     private readonly coreConfig: CoreConfig,
   ) {
+=======
+  @IsNotEmpty({ message: 'Set Env variable RECAPTCHA_URL, GROUP: RECAPTCHA' })
+  @IsString()
+  RECAPTCHA_URL: string;
+
+  @IsNotEmpty({
+    message: 'Set Env variable RECAPTCHA_SECRET_KEY, GROUP: RECAPTCHA',
+  })
+  @IsString()
+  RECAPTCHA_SECRET_KEY: string;
+
+  constructor(private configService: ConfigService) {
+>>>>>>> dev
     super();
 
     this.CONFIRMATION_TOKEN_EXPIRATION = Number(
@@ -115,6 +134,7 @@ export class UserAccountConfig extends BaseConfig {
       this.configService.getOrThrow('SESSION_CLEANUP_BATCH_SIZE'),
     );
 
+<<<<<<< HEAD
     this.GITHUB_CLIENT_ID = this.configService.getOrThrow('GITHUB_CLIENT_ID');
 
     this.GITHUB_CLIENT_SECRET = this.configService.getOrThrow(
@@ -127,6 +147,14 @@ export class UserAccountConfig extends BaseConfig {
 
     this.GITHUB_CALLBACK_URL = `${notificationConfig.CLIENT_URL}${coreConfig.GLOBAL_PREFIX}${this.GITHUB_CALLBACK_PATH}`;
 
+=======
+    this.RECAPTCHA_URL = this.configService.getOrThrow('RECAPTCHA_URL');
+
+    this.RECAPTCHA_SECRET_KEY = this.configService.getOrThrow(
+      'RECAPTCHA_SECRET_KEY',
+    );
+
+>>>>>>> dev
     this.validateConfig();
   }
 }
