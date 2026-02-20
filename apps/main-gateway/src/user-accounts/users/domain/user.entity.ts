@@ -6,6 +6,7 @@ import { CreateUserInputDto } from '../api/input-dto/create-user.input-dto';
 import { UuidProvider } from '../../core/helpers/uuid.provider';
 import { EmailConfirmation } from './emailConfirmation.entity';
 import { Session } from '../../sessions/domain/session.entity';
+import { Provider } from './provider.entity';
 import { PasswordRecovery } from './password-recovery.entity';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
@@ -33,6 +34,11 @@ export class User extends BaseWithUuidIdEntity {
     { onDelete: 'CASCADE', cascade: true },
   )
   emailConfirmation: EmailConfirmation;
+
+  @OneToMany(() => Provider, (provider) => provider.user, {
+    onDelete: 'CASCADE',
+  })
+  providers: Provider[];
 
   @OneToMany(() => Session, (session) => session.user, { onDelete: 'CASCADE' })
   sessions: Session[];

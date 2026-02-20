@@ -5,6 +5,7 @@ import { join } from 'path';
 import { User } from '../../../user-accounts/users/domain/user.entity';
 import { EmailConfirmation } from 'apps/main-gateway/src/user-accounts/users/domain/emailConfirmation.entity';
 import { Session } from '../../../user-accounts/sessions/domain/session.entity';
+import { Provider } from 'apps/main-gateway/src/user-accounts/users/domain/provider.entity';
 import { PasswordRecovery } from '../../../user-accounts/users/domain/password-recovery.entity';
 
 const baseDir = join(__dirname, '..', '..', '..');
@@ -15,6 +16,6 @@ const migrationsConfig: DataSourceOptions = {
   migrations: [
     join(baseDir, 'core', 'db', 'typeorm', 'migrations', '**', '*.ts'),
   ],
-  entities: [User, EmailConfirmation, Session, PasswordRecovery],
+  entities: [User, EmailConfirmation, Provider, Session, PasswordRecovery],
 };
 export default new DataSource(migrationsConfig);

@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UuidProvider } from '../../../core/helpers/uuid.provider';
 import { Injectable } from '@nestjs/common';
 import { LoginSuccessViewDto } from '../../api/view-dto/login-success.view-dto';
-import { SessionRepository } from '../../../sessions/infrastructure/session.repository';
+import { SessionsRepository } from '../../../sessions/infrastructure/sessions.repository';
 import { Session } from '../../../sessions/domain/session.entity';
 import { CreateSessionDto } from '../../../sessions/domain/dto/create-session.dto';
 import { JwtPayload } from 'apps/main-gateway/src/core/strategies/jwt-access.strategy';
@@ -27,7 +27,7 @@ export class LoginUserUseCase
     private readonly userAccountConfig: UserAccountConfig,
     private readonly jwtService: JwtService,
     private readonly uuidProvider: UuidProvider,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionsRepository: SessionsRepository,
   ) {}
 
   async execute(command: LoginUserCommand): Promise<LoginSuccessViewDto> {
@@ -65,6 +65,7 @@ export class LoginUserUseCase
       command.deviceName,
       command.ip,
       decodePayload.exp,
+      decodePayload.iat,
     );
 
     return {
@@ -79,11 +80,12 @@ export class LoginUserUseCase
     deviceName: string,
     ip: string,
     expiresAt: number,
+    lastActive: number,
   ): Promise<void> {
     const activeSessions =
-      await this.sessionRepository.countUserSessions(userId);
+      await this.sessionsRepository.countUserSessions(userId);
     if (activeSessions >= this.userAccountConfig.MAX_SESSIONS_PER_USER) {
-      await this.sessionRepository.deactivateOldestUserSession(userId);
+      await this.sessionsRepository.deactivateOldestUserSession(userId);
     }
 
     const createSessionDto: CreateSessionDto = {
@@ -92,8 +94,9 @@ export class LoginUserUseCase
       deviceName,
       ipAddress: ip,
       expiresAt,
+      lastActive,
     };
     const createdSession = Session.create(createSessionDto);
-    await this.sessionRepository.save(createdSession);
+    await this.sessionsRepository.save(createdSession);
   }
 }

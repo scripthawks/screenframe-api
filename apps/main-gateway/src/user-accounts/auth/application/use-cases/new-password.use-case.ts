@@ -4,7 +4,7 @@ import { NewPasswordInputDto } from '../../api/input-dto/new-password.input-dto'
 import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 import { ArgonHasher } from '../../../core/adapters/hash/argon-hasher.adapter';
-import { SessionRepository } from '../../../sessions/infrastructure/session.repository';
+import { SessionsRepository } from '../../../sessions/infrastructure/sessions.repository';
 import { NewPasswordEvent } from '../events/new-password.event';
 
 export class NewPasswordCommand {
@@ -18,7 +18,7 @@ export class NewPasswordUseCase
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly argonHasher: ArgonHasher,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionsRepository: SessionsRepository,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -49,10 +49,10 @@ export class NewPasswordUseCase
 
   private async deactivateAllUserSessions(userId: string): Promise<void> {
     const sessions =
-      await this.sessionRepository.findActiveSessionsByUserId(userId);
+      await this.sessionsRepository.findActiveSessionsByUserId(userId);
     for (const session of sessions) {
       session.deactivate();
-      await this.sessionRepository.save(session);
+      await this.sessionsRepository.save(session);
     }
   }
 }
