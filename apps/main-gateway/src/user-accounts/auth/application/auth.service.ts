@@ -53,10 +53,7 @@ export class AuthService {
     return user.id.toString();
   }
 
-  async validateOAuthLogin(
-    profile: OAuthProfileDto,
-    provider: 'google' | 'github',
-  ) {
+  async validateOAuth(profile: OAuthProfileDto, provider: 'google' | 'github') {
     const providerId = profile.id;
     const email = profile.emails?.[0]?.value;
     if (!email) {
