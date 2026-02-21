@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BaseConfig, CoreConfig } from '@app/core/config';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { NotificationConfig } from 'apps/main-gateway/src/notifications/core/config/notification.config';
+import { NotificationConfig } from '../../../notifications/core/config/notification.config';
 
 @Injectable()
 export class UserAccountConfig extends BaseConfig {
