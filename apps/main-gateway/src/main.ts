@@ -20,7 +20,7 @@ async function bootstrap() {
   await app.startAllMicroservices();
   console.log('Microservice started');
   await app.listen(port, () => {
-    console.log(`Server started on port: ${port}`);
+    console.log(`Server started on port ${port}`);
   });
 }
 bootstrap();
