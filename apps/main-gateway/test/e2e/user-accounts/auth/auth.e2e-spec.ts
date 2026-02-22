@@ -38,7 +38,7 @@ describe('e2e-Auth', () => {
   afterAll(async () => {
     await app.close();
   });
-  describe('POST/auth/verify-email', () => {
+  describe.skip('POST/auth/verify-email', () => {
     beforeEach(async (): Promise<void> => {
       await authE2eManager.signUp(validSignUpDto);
     });

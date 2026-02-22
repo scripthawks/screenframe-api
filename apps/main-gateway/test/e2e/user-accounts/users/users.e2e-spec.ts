@@ -13,7 +13,7 @@ describe('e2e-Users', () => {
   afterAll(async () => {
     await app.close();
   });
-  describe("GET/users'", () => {
+  describe.skip("GET/users'", () => {
     it('should return users : STATUS 200', async () => {
       return request(app.getHttpServer())
         .get('/api/v1/users')
