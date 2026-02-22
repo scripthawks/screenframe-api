@@ -51,7 +51,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       displayName: typedProfile.displayName,
       emails: emails,
     };
-    const user = await this.authService.validateOAuthLogin(
+    const user = await this.authService.validateOAuth(
       oauthProfile,
       'github',
     );
