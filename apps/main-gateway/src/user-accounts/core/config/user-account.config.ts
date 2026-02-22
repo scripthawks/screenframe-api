@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BaseConfig } from '@app/core/config';
+import { BaseConfig, CoreConfig } from '@app/core/config';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { NotificationConfig } from '../../../notifications/core/config/notification.config';
 
 @Injectable()
 export class UserAccountConfig extends BaseConfig {
@@ -71,11 +72,36 @@ export class UserAccountConfig extends BaseConfig {
   @IsString()
   RECAPTCHA_SECRET_KEY: string;
 
-  constructor(private configService: ConfigService) {
+  @IsString({
+    message: 'Set Env variable GITHUB_CLIENT_ID for OAuth',
+  })
+  GITHUB_CLIENT_ID: string;
+
+  @IsString({
+    message: 'Set Env variable GITHUB_CLIENT_SECRET for OAuth',
+  })
+  GITHUB_CLIENT_SECRET: string;
+
+  @IsString({
+    message: 'Set Env variable GITHUB_CALLBACK_PATH for OAuth',
+  })
+  GITHUB_CALLBACK_PATH: string;
+
+  GITHUB_CALLBACK_URL: string;
+
+  constructor(
+    private configService: ConfigService,
+    private readonly notificationConfig: NotificationConfig,
+    private readonly coreConfig: CoreConfig,
+  ) {
     super();
 
     this.CONFIRMATION_TOKEN_EXPIRATION = Number(
       this.configService.getOrThrow('CONFIRMATION_TOKEN_EXPIRATION'),
+    );
+
+    this.SESSION_CLEANUP_BATCH_SIZE = Number(
+      this.configService.getOrThrow('SESSION_CLEANUP_BATCH_SIZE'),
     );
 
     this.ACCESS_TOKEN_SECRET = this.configService.getOrThrow(
@@ -102,6 +128,18 @@ export class UserAccountConfig extends BaseConfig {
     this.SESSION_CLEANUP_BATCH_SIZE = Number(
       this.configService.getOrThrow('SESSION_CLEANUP_BATCH_SIZE'),
     );
+
+    this.GITHUB_CLIENT_ID = this.configService.getOrThrow('GITHUB_CLIENT_ID');
+
+    this.GITHUB_CLIENT_SECRET = this.configService.getOrThrow(
+      'GITHUB_CLIENT_SECRET',
+    );
+
+    this.GITHUB_CALLBACK_PATH = this.configService.getOrThrow(
+      'GITHUB_CALLBACK_PATH',
+    );
+
+    this.GITHUB_CALLBACK_URL = `${notificationConfig.CLIENT_URL}${coreConfig.GLOBAL_PREFIX}${this.GITHUB_CALLBACK_PATH}`;
 
     this.RECAPTCHA_URL = this.configService.getOrThrow('RECAPTCHA_URL');
 

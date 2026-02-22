@@ -20,6 +20,9 @@ export class Session extends BaseWithUuidIdEntity {
   @Column({ type: 'timestamp with time zone' })
   expiresAt: Date;
 
+  @Column({ type: 'timestamp with time zone' })
+  lastActive: Date;
+
   @Column({ type: 'boolean', default: true })
   isActive: boolean = true;
 
@@ -30,6 +33,7 @@ export class Session extends BaseWithUuidIdEntity {
     session.deviceName = dto.deviceName;
     session.ipAddress = dto.ipAddress;
     session.expiresAt = new Date(dto.expiresAt * 1000);
+    session.lastActive = new Date(dto.lastActive * 1000);
     session.isActive = true;
     return session;
   }
