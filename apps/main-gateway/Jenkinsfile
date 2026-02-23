@@ -114,5 +114,13 @@ pipeline {
                  }
              }
         }
+        stage('Check pods status') {
+              steps {
+                 script {
+                    sh 'kubectl get pods -n screenframe-ru'
+                    sh 'kubectl logs -n screenframe-ru -l project=main-gateway-screenframe-api'
+                 }
+             }
+        }
     }
 }
