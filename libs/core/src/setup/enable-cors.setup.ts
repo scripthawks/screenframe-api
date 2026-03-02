@@ -11,7 +11,7 @@ export function enableCorsSetup(app: INestApplication, coreConfig: CoreConfig) {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Authorization', 'Content-Type'],
-    exposedHeaders: ['Authorization', 'Content-Type'],
+    exposedHeaders: ['Authorization'],
     maxAge: 3600,
   });
 }
