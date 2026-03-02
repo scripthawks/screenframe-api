@@ -117,6 +117,51 @@ pipeline {
                  }
              }
         }
-        
+       stage('Check CORS Configuration') {
+    steps {
+        script {
+            withKubeConfig([credentialsId: 'prod-kubernetes']) {
+                sh '''
+                    echo "========================================="
+                    echo "🔍 ПРОВЕРКА CORS НАСТРОЕК"
+                    echo "========================================="
+                    
+                    # Получаем значение CORS_ORIGINS из секрета
+                    echo "📋 CORS_ORIGINS из секрета:"
+                    CORS_VALUE=$(kubectl get secret main-gateway-screenframe-api-production-config-secret -n screenframe-ru -o jsonpath="{.data.CORS_ORIGINS}" | base64 -d)
+                    echo "$CORS_VALUE"
+                    
+                    # Проверяем, есть ли Jenkins origin в списке
+                    echo ""
+                    echo "🔎 Проверка наличия Jenkins origin (https://jenkins.trainee.it-incubator.io):"
+                    if [[ "$CORS_VALUE" == *"jenkins.trainee.it-incubator.io"* ]]; then
+                        echo "✅ Jenkins origin найден в CORS_ORIGINS!"
+                    else
+                        echo "❌ Jenkins origin НЕ найден в CORS_ORIGINS!"
+                        echo "⚠️  Нужно добавить: https://jenkins.trainee.it-incubator.io"
+                    fi
+                    
+                    # Получаем список всех переменных из секрета (без значений)
+                    echo ""
+                    echo "📦 Все ключи в секрете:"
+                    kubectl get secret main-gateway-screenframe-api-production-config-secret -n screenframe-ru -o jsonpath="{.data}" | jq 'keys'
+                    
+                    # Проверяем логи пода на наличие CORS ошибок
+                    echo ""
+                    echo "📋 Последние логи пода (проверка на CORS ошибки):"
+                    POD=$(kubectl get pods -n screenframe-ru -l app=main-gateway-screenframe-api -o jsonpath="{.items[0].metadata.name}" 2>/dev/null || echo "")
+                    if [ -n "$POD" ]; then
+                        echo "Под: $POD"
+                        kubectl logs $POD -n screenframe-ru --tail=20 | grep -i cors || echo "CORS ошибок в логах не найдено"
+                    else
+                        echo "Не удалось найти под с приложением"
+                    fi
+                    
+                    echo "========================================="
+                '''
+            }
+        }
+    }
+}
     }
 }
