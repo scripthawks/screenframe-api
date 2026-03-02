@@ -118,7 +118,6 @@ pipeline {
              }
         }
        stage('Check CORS Configuration') {
-stage('Check CORS Configuration') {
     steps {
         script {
             withKubeConfig([credentialsId: 'prod-kubernetes']) {
