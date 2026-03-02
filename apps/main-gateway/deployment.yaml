@@ -141,6 +141,11 @@ spec:
                 secretKeyRef:
                   name: main-gateway-screenframe-api-production-config-secret
                   key: GITHUB_CALLBACK_PATH
+            - name: CORS_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: CORS_ORIGINS
             - name: GLOBAL_PREFIX
               valueFrom:
                 secretKeyRef:
