@@ -36,6 +36,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
         throw new DomainException(
           CommonExceptionCodes.CONFLICT,
           'User with this email is already registered',
+          [{ key: 'email', message: 'Email is already in use' }],
         );
       }
 
@@ -43,6 +44,7 @@ export class SignUpUseCase implements ICommandHandler<SignUpCommand> {
         throw new DomainException(
           CommonExceptionCodes.CONFLICT,
           'User with this username is already registered',
+          [{ key: 'userName', message: 'Username is already in use' }],
         );
       }
     }
