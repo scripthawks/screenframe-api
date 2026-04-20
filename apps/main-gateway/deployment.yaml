@@ -16,118 +16,138 @@ spec:
         project: PROJECT
     spec:
       containers:
-         - name: PROJECT
-           image: REGISTRY_HOSTNAME/PROJECT:TAG_VERSION
-           ports:
-             - containerPort: PORT_CONTAINER
-           env:
-             - name: IS_SWAGGER_ENABLED
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: IS_SWAGGER_ENABLED
-             - name: DATABASE_URL
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: DATABASE_URL
-             - name: IS_DB_SYNCHRONIZE
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: IS_DB_SYNCHRONIZE
-             - name: IS_DB_LOGGING
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: IS_DB_LOGGING
-             - name: MAIL_PASS
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: MAIL_PASS
-             - name: MAIL_SERVICE
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: MAIL_SERVICE
-             - name: MAIL_USER
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: MAIL_USER
-             - name: IZ_MAILER_TLS_VERIFICATION
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: IZ_MAILER_TLS_VERIFICATION
-             - name: CLIENT_URL
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: CLIENT_URL
-             - name: VERIFY_EMAIL_PATH
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: VERIFY_EMAIL_PATH
-             - name: CONFIRMATION_TOKEN_EXPIRATION
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: CONFIRMATION_TOKEN_EXPIRATION
-             - name: PASSWORD_RECOVERY_PATH
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: PASSWORD_RECOVERY_PATH
-             - name: ACCESS_TOKEN_SECRET
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: ACCESS_TOKEN_SECRET
-             - name: REFRESH_TOKEN_SECRET
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: REFRESH_TOKEN_SECRET
-             - name: ACCESS_TOKEN_EXPIRATION
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: ACCESS_TOKEN_EXPIRATION
-             - name: REFRESH_TOKEN_EXPIRATION
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: REFRESH_TOKEN_EXPIRATION
-             - name: USER_CLEANUP_BATCH_SIZE
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: USER_CLEANUP_BATCH_SIZE
-             - name: MAX_SESSIONS_PER_USER
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: MAX_SESSIONS_PER_USER
-             - name: SESSION_CLEANUP_BATCH_SIZE
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: SESSION_CLEANUP_BATCH_SIZE
-             - name: RECAPTCHA_URL
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: RECAPTCHA_URL
-             - name: RECAPTCHA_SECRET_KEY
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: RECAPTCHA_SECRET_KEY
-             - name: GLOBAL_PREFIX
-               valueFrom:
-                 secretKeyRef:
-                   name: main-gateway-screenframe-api-production-config-secret
-                   key: GLOBAL_PREFIX
+        - name: PROJECT
+          image: REGISTRY_HOSTNAME/PROJECT:TAG_VERSION
+          ports:
+            - containerPort: PORT_CONTAINER
+          env:
+            - name: IS_SWAGGER_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: IS_SWAGGER_ENABLED
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: DATABASE_URL
+            - name: IS_DB_SYNCHRONIZE
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: IS_DB_SYNCHRONIZE
+            - name: IS_DB_LOGGING
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: IS_DB_LOGGING
+            - name: MAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: MAIL_PASS
+            - name: MAIL_SERVICE
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: MAIL_SERVICE
+            - name: MAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: MAIL_USER
+            - name: IZ_MAILER_TLS_VERIFICATION
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: IZ_MAILER_TLS_VERIFICATION
+            - name: CLIENT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: CLIENT_URL
+            - name: VERIFY_EMAIL_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: VERIFY_EMAIL_PATH
+            - name: CONFIRMATION_TOKEN_EXPIRATION
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: CONFIRMATION_TOKEN_EXPIRATION
+            - name: PASSWORD_RECOVERY_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: PASSWORD_RECOVERY_PATH
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: ACCESS_TOKEN_SECRET
+            - name: REFRESH_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: REFRESH_TOKEN_SECRET
+            - name: ACCESS_TOKEN_EXPIRATION
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: ACCESS_TOKEN_EXPIRATION
+            - name: REFRESH_TOKEN_EXPIRATION
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: REFRESH_TOKEN_EXPIRATION
+            - name: USER_CLEANUP_BATCH_SIZE
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: USER_CLEANUP_BATCH_SIZE
+            - name: MAX_SESSIONS_PER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: MAX_SESSIONS_PER_USER
+            - name: SESSION_CLEANUP_BATCH_SIZE
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: SESSION_CLEANUP_BATCH_SIZE
+            - name: RECAPTCHA_URL
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: RECAPTCHA_URL
+            - name: RECAPTCHA_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: RECAPTCHA_SECRET_KEY
+            - name: GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GITHUB_CLIENT_ID
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GITHUB_CLIENT_SECRET
+            - name: GITHUB_CALLBACK_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GITHUB_CALLBACK_PATH
+            - name: CORS_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: CORS_ORIGINS
+            - name: GLOBAL_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GLOBAL_PREFIX

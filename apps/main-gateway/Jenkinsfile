@@ -110,9 +110,58 @@ pipeline {
                  withKubeConfig([credentialsId: 'prod-kubernetes']) {
                     sh "kubectl apply -f ./apps/${env.SERVICE}/deployment.yaml"
                     sh "kubectl rollout status deployment/${env.DEPLOYMENT_NAME} --namespace=${env.NAMESPACE}"
+                    
+                    sh "kubectl get pods -n screenframe-ru"
+    
                     sh "kubectl get services -o wide"
                  }
              }
         }
+       stage('Check CORS Configuration') {
+    steps {
+        script {
+            withKubeConfig([credentialsId: 'prod-kubernetes']) {
+                sh '''
+                    echo "========================================="
+                    echo "🔍 ПРОВЕРКА CORS НАСТРОЕК"
+                    echo "========================================="
+                    
+                    # Получаем значение CORS_ORIGINS из секрета
+                    echo "📋 CORS_ORIGINS из секрета:"
+                    CORS_VALUE=$(kubectl get secret main-gateway-screenframe-api-production-config-secret -n screenframe-ru -o jsonpath="{.data.CORS_ORIGINS}" | base64 -d)
+                    echo "$CORS_VALUE"
+                    
+                    # Проверяем, есть ли Jenkins origin в списке (POSIX-совместимый способ)
+                    echo ""
+                    echo "🔎 Проверка наличия Jenkins origin (https://jenkins.trainee.it-incubator.io):"
+                    if echo "$CORS_VALUE" | grep -q "jenkins.trainee.it-incubator.io"; then
+                        echo "✅ Jenkins origin найден в CORS_ORIGINS!"
+                    else
+                        echo "❌ Jenkins origin НЕ найден в CORS_ORIGINS!"
+                        echo "⚠️  Нужно добавить: https://jenkins.trainee.it-incubator.io/job/prd-main-gateway-screenframe-api-pull-request"
+                    fi
+                    
+                    # Получаем список всех переменных из секрета (без jq)
+                    echo ""
+                    echo "📦 Все ключи в секрете:"
+                    kubectl get secret main-gateway-screenframe-api-production-config-secret -n screenframe-ru -o jsonpath="{.data}" | sed 's/ /\n/g' | grep -o '"[^"]*"' || echo "Не удалось получить список ключей"
+                    
+                    # Проверяем логи пода на наличие CORS ошибок
+                    echo ""
+                    echo "📋 Последние логи пода (проверка на CORS ошибки):"
+                    POD=$(kubectl get pods -n screenframe-ru -l app=main-gateway-screenframe-api -o jsonpath="{.items[0].metadata.name}" 2>/dev/null || echo "")
+                    if [ -n "$POD" ]; then
+                        echo "Под: $POD"
+                        kubectl logs $POD -n screenframe-ru --tail=20 | grep -i cors || echo "CORS ошибок в логах не найдено"
+                    else
+                        echo "Не удалось найти под с приложением"
+                    fi
+                    
+                    echo "========================================="
+                '''
+            }
+        }
+    }
+}
     }
 }
