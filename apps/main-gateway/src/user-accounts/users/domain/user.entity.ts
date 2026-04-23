@@ -16,7 +16,7 @@ export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })
   email: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({ type: 'varchar' })
   password: string;
 
   @Column({ type: 'boolean', default: false })
