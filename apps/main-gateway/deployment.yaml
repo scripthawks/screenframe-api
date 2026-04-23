@@ -18,6 +18,10 @@ spec:
       containers:
         - name: PROJECT
           image: REGISTRY_HOSTNAME/PROJECT:TAG_VERSION
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true # опционально, но хорошая практика
+            runAsUser: 1000 # опционально
           ports:
             - containerPort: PORT_CONTAINER
           env:
@@ -146,6 +150,21 @@ spec:
                 secretKeyRef:
                   name: main-gateway-screenframe-api-production-config-secret
                   key: CORS_ORIGINS
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GOOGLE_CLIENT_SECRET
+            - name: GOOGLE_CALLBACK_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: GOOGLE_CALLBACK_PATH
             - name: GLOBAL_PREFIX
               valueFrom:
                 secretKeyRef:
