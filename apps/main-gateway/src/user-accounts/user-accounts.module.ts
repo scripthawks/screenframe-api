@@ -55,6 +55,7 @@ import {
 import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-recovery-token.use-case';
 import { PasswordRecoveryResendingUseCase } from './auth/application/use-cases/password-recovery-resending.use-case';
 import { NewPasswordUseCase } from './auth/application/use-cases/new-password.use-case';
+import { GoogleStrategy } from './core/strategies/google.strategy';
 
 const configs = [UserAccountConfig, NotificationConfig, CoreConfig];
 const adapters = [ArgonHasher];
@@ -63,6 +64,7 @@ const strategies = [
   RefreshStrategy,
   JwtStrategy,
   GithubStrategy,
+  GoogleStrategy,
 ];
 const controllers = [
   UsersController,

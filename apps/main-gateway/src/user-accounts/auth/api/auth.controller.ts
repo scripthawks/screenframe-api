@@ -199,6 +199,20 @@ export class AuthController {
     );
   }
 
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {}
+
+  @Get('google/redirect')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(
+    @Req() req: ExpressRequest,
+    @Res() response: Response,
+  ) {
+    return this.handleOAuthRedirect(req, response);
+  }
+
   @Get('github')
   @UseGuards(AuthGuard('github'))
   async githubAuth() {}
@@ -210,23 +224,18 @@ export class AuthController {
     @Req() req: ExpressRequest,
     @Res() response: Response,
   ) {
-    const user = req.user as User;
-    if (!user) {
-      console.error('User not found in request!');
-      throw new Error('Authentication failed: user not found');
-    }
+    return this.handleOAuthRedirect(req, response);
+  }
 
-    const ip = req.ip;
-    const deviceName = req.headers['user-agent'];
+  private async handleOAuthRedirect(req: ExpressRequest, response: Response) {
+    const user = req.user as User;
 
     const result: LoginSuccessViewDto = await this.commandBus.execute(
-      new LoginUserCommand(user.id, ip, deviceName),
+      new LoginUserCommand(user.id, req.ip, req.headers['user-agent']),
     );
 
-    const { refreshToken } = result;
-
-    this.setRefreshTokenCookie(refreshToken, response);
-    response.redirect('http://localhost:4010/api/v1/sessions');
+    this.setRefreshTokenCookie(result.refreshToken, response);
+    response.redirect('http://localhost:5173/');
   }
 
   private setRefreshTokenCookie(refreshToken: string, response: Response) {

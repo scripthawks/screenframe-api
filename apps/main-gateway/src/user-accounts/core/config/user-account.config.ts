@@ -89,6 +89,19 @@ export class UserAccountConfig extends BaseConfig {
 
   GITHUB_CALLBACK_URL: string;
 
+  @IsString({
+    message: 'Set Env variable GOOGLE_CLIENT_ID for OAuth',
+  })
+  GOOGLE_CLIENT_ID: string;
+  @IsString({
+    message: 'Set Env variable GOOGLE_CLIENT_SECRET for OAuth',
+  })
+  GOOGLE_CLIENT_SECRET: string;
+
+  GOOGLE_CALLBACK_URL: string;
+
+  GOOGLE_CALLBACK_PATH: string;
+
   constructor(
     private configService: ConfigService,
     private readonly notificationConfig: NotificationConfig,
@@ -146,6 +159,18 @@ export class UserAccountConfig extends BaseConfig {
     this.RECAPTCHA_SECRET_KEY = this.configService.getOrThrow(
       'RECAPTCHA_SECRET_KEY',
     );
+
+    this.GOOGLE_CLIENT_ID = this.configService.getOrThrow('GOOGLE_CLIENT_ID');
+
+    this.GOOGLE_CLIENT_SECRET = this.configService.getOrThrow(
+      'GOOGLE_CLIENT_SECRET',
+    );
+
+    this.GOOGLE_CALLBACK_PATH = this.configService.getOrThrow(
+      'GOOGLE_CALLBACK_PATH',
+    );
+
+    this.GOOGLE_CALLBACK_URL = `${notificationConfig.CLIENT_URL}${coreConfig.GLOBAL_PREFIX}${this.GOOGLE_CALLBACK_PATH}`;
 
     this.validateConfig();
   }
