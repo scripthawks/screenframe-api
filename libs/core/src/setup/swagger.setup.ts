@@ -7,6 +7,15 @@ export function swaggerSetup(app: INestApplication, coreConfig: CoreConfig) {
     const config = new DocumentBuilder()
       .setTitle('Screenframe API')
       .setDescription('API for screenframe')
+      .addBearerAuth(
+        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+        'accessToken',
+      )
+      .addCookieAuth(
+        'refreshToken',
+        { type: 'apiKey', in: 'cookie' },
+        'refreshToken',
+      )
       .setVersion('1.0')
       .build();
 
