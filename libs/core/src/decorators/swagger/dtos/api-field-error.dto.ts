@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export class ExtensionDto {
+  @ApiProperty() key: string;
+  @ApiProperty() message: string;
+}
+
 export class ApiFieldErrorDto {
   @ApiProperty({
     type: String,
@@ -23,11 +28,11 @@ export class ApiFieldErrorDto {
   message: string;
 
   @ApiProperty({
-    type: [String],
+    type: [ExtensionDto],
     description: 'Additional error extensions',
-    example: [],
+    example: [{ key: 'string', message: 'string' }],
   })
-  extensions: string[];
+  extensions: ExtensionDto[];
 
   @ApiProperty({
     type: String,
