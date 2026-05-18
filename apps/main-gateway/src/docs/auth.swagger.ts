@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ApiFieldErrorDto } from './dtos';
+import { ApiFieldErrorDto } from '@app/core/decorators/swagger/dtos';
 import { SignUpUserInputDto } from 'apps/main-gateway/src/user-accounts/auth/api/input-dto/sign-up.input-dto';
 import { LoginInputDto } from 'apps/main-gateway/src/user-accounts/auth/api/input-dto/login.input-dto';
 import { ApiProperty } from '@nestjs/swagger';
