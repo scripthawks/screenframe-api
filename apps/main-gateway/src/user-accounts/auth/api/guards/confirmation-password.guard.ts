@@ -41,12 +41,26 @@ export class PasswordConfirmationGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<{ body: RequestBody }>();
     const { body } = request;
 
+    if (!body) {
+      throw new DomainException(
+        CommonExceptionCodes.BAD_REQUEST,
+        `Body is required`,
+      );
+    }
+
     const password = body[passwordField];
     const confirmation = body[confirmationField];
 
-    if (!password || !confirmation || password !== confirmation) {
+    if (!password || !confirmation) {
       throw new DomainException(
-        CommonExceptionCodes.NOT_FOUND,
+        CommonExceptionCodes.BAD_REQUEST,
+        `Password and confirmation are required`,
+      );
+    }
+
+    if (password !== confirmation) {
+      throw new DomainException(
+        CommonExceptionCodes.BAD_REQUEST,
         `Passwords must match`,
       );
     }
