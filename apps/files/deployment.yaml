@@ -28,20 +28,15 @@ spec:
              - name: CLOUDINARY_API_KEY
                valueFrom:
                  secretKeyRef:
-                   name: files-scripthawks-production-config-secret
+                   name: files-screenframe-api-production-config-secret
                    key: CLOUDINARY_API_KEY
              - name: CLOUDINARY_API_SECRET
                valueFrom:
                  secretKeyRef:
-                   name: files-scripthawks-production-config-secret
+                   name: files-screenframe-api-production-config-secret
                    key: CLOUDINARY_API_SECRET
-             - name: FILES_SERVICE_PORT
-               valueFrom:
-                 secretKeyRef:
-                   name: files-scripthawks-production-config-secret
-                   key: FILES_SERVICE_PORT
              - name: CLOUDINARY_CLOUD_NAME
                valueFrom:
                  secretKeyRef:
-                   name: files-scripthawks-production-config-secret
+                   name: files-screenframe-api-production-config-secret
                    key: CLOUDINARY_CLOUD_NAME
