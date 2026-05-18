@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users/api/users.controller';
-import { PostsController } from '../posts/api/posts.controller';
 import { UsersService } from './users/application/users.service';
-import { PostsService } from '../posts/application/posts.service';
 import { UsersRepository } from './users/infrastructure/users.repository';
 import { UsersQueryRepository } from './users/infrastructure/users.query-repository';
-import { PostsRepository } from '../posts/infrastructure/posts.repository';
-import { PostsQueryRepository } from '../posts/infrastructure/posts.query-repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/domain/user.entity';
 import { UserAccountConfig } from './core/config/user-account.config';
@@ -66,19 +62,13 @@ const strategies = [
   GithubStrategy,
   GoogleStrategy,
 ];
-const controllers = [
-  UsersController,
-  PostsController,
-  AuthController,
-  SessionsController,
-];
+const controllers = [UsersController, AuthController, SessionsController];
 const services = [
   JwtService,
   AuthService,
   UserCleanupService,
   SessionCleanupService,
   UsersService,
-  PostsService,
   RecaptchaService,
 ];
 const useCases = [
@@ -102,8 +92,6 @@ const repositories = [
   ProvidersRepository,
   SessionsRepository,
   SessionsQueryRepository,
-  PostsRepository,
-  PostsQueryRepository,
 ];
 
 @Module({

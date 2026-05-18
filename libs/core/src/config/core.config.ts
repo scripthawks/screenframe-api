@@ -63,6 +63,18 @@ export class CoreConfig extends BaseConfig {
   @IsString()
   CORS_ORIGINS: string;
 
+  @IsNotEmpty({
+    message: 'Set Env variable FILES_SERVICE_HOST, GROUP: Infrastructure!',
+  })
+  @IsString()
+  FILES_SERVICE_HOST: string;
+
+  @IsNotEmpty({
+    message: 'Set Env variable FILES_SERVICE_PORT, GROUP: Infrastructure!',
+  })
+  @IsNumber()
+  FILES_SERVICE_PORT: number;
+
   constructor(private configService: ConfigService) {
     super();
     this.ENV = this.configService.getOrThrow('NODE_ENV');
@@ -80,6 +92,12 @@ export class CoreConfig extends BaseConfig {
       this.configService.getOrThrow('IS_DB_LOGGING'),
     );
     this.CORS_ORIGINS = this.configService.getOrThrow('CORS_ORIGINS');
+
+    this.FILES_SERVICE_HOST =
+      this.configService.getOrThrow('FILES_SERVICE_HOST');
+    this.FILES_SERVICE_PORT = Number(
+      this.configService.getOrThrow('FILES_SERVICE_PORT'),
+    );
 
     this.validateConfig();
   }

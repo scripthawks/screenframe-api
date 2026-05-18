@@ -165,6 +165,16 @@ spec:
                 secretKeyRef:
                   name: main-gateway-screenframe-api-production-config-secret
                   key: GOOGLE_CALLBACK_PATH
+            - name: FILES_SERVICE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: FILES_SERVICE_HOST
+            - name: FILES_SERVICE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: main-gateway-screenframe-api-production-config-secret
+                  key: FILES_SERVICE_PORT
             - name: GLOBAL_PREFIX
               valueFrom:
                 secretKeyRef:

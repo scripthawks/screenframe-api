@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: DEPLOYMENT_NAME
+  namespace: NAMESPACE
+  labels:
+    app: PROJECT
+spec:
+  selector:
+    matchLabels:
+      project: PROJECT
+  template:
+    metadata:
+      namespace: NAMESPACE
+      labels:
+        project: PROJECT
+    spec:
+      containers:
+         - name: PROJECT
+           image: REGISTRY_HOSTNAME/PROJECT:TAG_VERSION
+           securityContext:
+             allowPrivilegeEscalation: false
+             runAsNonRoot: true      # опционально, но хорошая практика
+             runAsUser: 1000         # опционально
+           ports:
+             - containerPort: PORT_CONTAINER
+           env:
+             - name: CLOUDINARY_API_KEY
+               valueFrom:
+                 secretKeyRef:
+                   name: files-scripthawks-production-config-secret
+                   key: CLOUDINARY_API_KEY
+             - name: CLOUDINARY_API_SECRET
+               valueFrom:
+                 secretKeyRef:
+                   name: files-scripthawks-production-config-secret
+                   key: CLOUDINARY_API_SECRET
+             - name: FILES_SERVICE_PORT
+               valueFrom:
+                 secretKeyRef:
+                   name: files-scripthawks-production-config-secret
+                   key: FILES_SERVICE_PORT
+             - name: CLOUDINARY_CLOUD_NAME
+               valueFrom:
+                 secretKeyRef:
+                   name: files-scripthawks-production-config-secret
+                   key: CLOUDINARY_CLOUD_NAME
