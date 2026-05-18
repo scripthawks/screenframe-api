@@ -9,7 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SignUpCommand } from '../application/use-cases/sign-up.use-case';
 import { VerifyEmailCommand } from '../application/use-cases/verify-email.use-case';
@@ -55,7 +55,7 @@ import {
   ApiCheckRecoveryToken,
   ApiPasswordRecoveryResending,
   ApiNewPassword,
-} from '@app/core/decorators/swagger/auth.swagger';
+} from '../../../docs/auth.swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -164,6 +164,7 @@ export class AuthController {
   @Get('google/redirect')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('google'))
+  @ApiExcludeEndpoint()
   async googleAuthRedirect(
     @Req() req: ExpressRequest,
     @Res() response: Response,
@@ -178,6 +179,7 @@ export class AuthController {
   @Get('github/redirect')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('github'))
+  @ApiExcludeEndpoint()
   async githubAuthRedirect(
     @Req() req: ExpressRequest,
     @Res() response: Response,
