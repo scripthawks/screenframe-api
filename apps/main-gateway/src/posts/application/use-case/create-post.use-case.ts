@@ -3,7 +3,7 @@ import { PostsRepository } from '../../infrastructure/posts.repository';
 import { BadRequestException } from '@nestjs/common';
 import { FilesClientService } from '../../../clients/files/file-client.service';
 import { PostImage } from '../../domain/post-image.entity';
-import { UsersRepository } from 'apps/main-gateway/src/user-accounts/users/infrastructure/users.repository';
+import { UsersRepository } from '../../../user-accounts/users/infrastructure/users.repository';
 import { Post } from '../../domain/post.entity';
 
 export class CreatePostCommand {
