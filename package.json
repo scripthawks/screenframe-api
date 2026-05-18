@@ -16,6 +16,7 @@
     "start:main-gateway:prod": "cross-env NODE_ENV=development node dist/apps/main-gateway/main.js",
     "start:files:dev": "cross-env NODE_ENV=development nest start files --watch",
     "start:files:prod": "cross-env NODE_ENV=production node dist/apps/files/main.js",
+    "build:files": "nest build files",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
