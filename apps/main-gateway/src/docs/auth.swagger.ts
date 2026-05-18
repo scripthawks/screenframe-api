@@ -8,10 +8,10 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ApiFieldErrorDto } from '@app/core/decorators/swagger/dtos';
-import { SignUpUserInputDto } from 'apps/main-gateway/src/user-accounts/auth/api/input-dto/sign-up.input-dto';
-import { LoginInputDto } from 'apps/main-gateway/src/user-accounts/auth/api/input-dto/login.input-dto';
+import { SignUpUserInputDto } from '../user-accounts/auth/api/input-dto/sign-up.input-dto';
+import { LoginInputDto } from '../user-accounts/auth/api/input-dto/login.input-dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { MeViewDto } from 'apps/main-gateway/src/user-accounts/auth/api/view-dto/me.view-dto';
+import { MeViewDto } from '../user-accounts/auth/api/view-dto/me.view-dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 export class LoginResponseDto {
