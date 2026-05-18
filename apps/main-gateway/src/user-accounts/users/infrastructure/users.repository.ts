@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RepositoryException } from '@app/core/exceptions';
@@ -10,6 +10,12 @@ export class UsersRepository {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
+
+  async findById(id: string): Promise<User | null> {
+    return await this.usersRepository.findOne({
+      where: { id, deletedAt: IsNull() },
+    });
+  }
 
   async create(user: User): Promise<User> {
     return this.usersRepository.save(user);
