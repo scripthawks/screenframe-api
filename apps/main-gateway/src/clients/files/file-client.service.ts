@@ -12,14 +12,19 @@ export class FilesClientService {
       url: string;
     }[]
   > {
-    return firstValueFrom(
-      this.client.send(
-        'send_images',
-        files.map((f) => ({
-          fileData: f.buffer.toString('base64'),
-          mimetype: f.mimetype,
-        })),
-      ),
-    );
+    try {
+      return firstValueFrom(
+        this.client.send(
+          'send_images',
+          files.map((f) => ({
+            fileData: f.buffer.toString('base64'),
+            mimetype: f.mimetype,
+          })),
+        ),
+      );
+    } catch (error) {
+      console.error('Error sending images', error);
+      throw error;
+    }
   }
 }
