@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
+import { FileConfig } from '../config/file.config';
 
 @Injectable()
 export class CloudinaryService {
-  constructor() {
+  constructor(private readonly fileConfig: FileConfig) {
     cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
+      cloud_name: this.fileConfig.cloudinaryCloudName,
+      api_key: this.fileConfig.cloudinaryApiKey,
+      api_secret: this.fileConfig.cloudinaryApiSecret,
     });
   }
   async uploadImage(
