@@ -16,6 +16,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
 import { PostsQueryRepository } from '../infrastructure/posts.query-repository';
 import { PostViewDto } from './view-dto/post.view-dto';
+import * as multer from 'multer';
 
 @Controller('posts')
 export class PostsController {
@@ -29,6 +30,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FilesInterceptor('image', 10, {
+      storage: multer.memoryStorage(),
       limits: { fileSize: 20 * 1024 * 1024, files: 10 },
     }),
   )
