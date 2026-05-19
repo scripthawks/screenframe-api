@@ -14,7 +14,7 @@ export class FileConfig {
   @IsNotEmpty({ message: 'Set ENV variable CLOUDINARY_API_SECRET' })
   cloudinaryApiSecret: string;
 
-  @IsNumber({}, { message: 'Set ENV variable FILES_SERVICE_PORT' })
+  @IsNumber({}, { message: 'Set ENV variable PORT' })
   filesServicePort: number;
 
   constructor(private configService: ConfigService<any, true>) {

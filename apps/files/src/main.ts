@@ -15,6 +15,8 @@ async function bootstrap() {
       port: fileConfig.filesServicePort,
     },
   });
+
   await app.listen();
+  console.log(`Files service started on port ${fileConfig.filesServicePort}`);
 }
 bootstrap();
