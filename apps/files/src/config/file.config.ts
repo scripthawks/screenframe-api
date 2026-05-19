@@ -21,9 +21,7 @@ export class FileConfig {
     this.cloudinaryCloudName = this.configService.get('CLOUDINARY_CLOUD_NAME');
     this.cloudinaryApiKey = this.configService.get('CLOUDINARY_API_KEY');
     this.cloudinaryApiSecret = this.configService.get('CLOUDINARY_API_SECRET');
-    this.filesServicePort = Number(
-      this.configService.get('FILES_SERVICE_PORT'),
-    );
+    this.filesServicePort = Number(this.configService.get('PORT'));
 
     configValidationUtility.validateConfig(this);
   }

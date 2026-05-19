@@ -4,9 +4,6 @@ import { BaseWithUuidIdEntity } from '@app/core/entities';
 
 @Entity('post_images')
 export class PostImage extends BaseWithUuidIdEntity {
-  @Column()
-  postId: string;
-
   @ManyToOne(() => Post, (post) => post.images, {
     onDelete: 'CASCADE',
   })
