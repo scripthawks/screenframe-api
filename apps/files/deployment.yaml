@@ -35,6 +35,11 @@ spec:
                  secretKeyRef:
                    name: files-screenframe-api-production-config-secret
                    key: CLOUDINARY_API_SECRET
+             - name: PORT
+               valueFrom:
+                 secretKeyRef:
+                   name: files-screenframe-api-production-config-secret
+                   key: PORT
              - name: CLOUDINARY_CLOUD_NAME
                valueFrom:
                  secretKeyRef:
