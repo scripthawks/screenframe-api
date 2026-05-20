@@ -125,5 +125,6 @@ const repositories = [
     ...useCases,
     ...adapters,
   ],
+  exports: [UsersQueryRepository],
 })
 export class UserAccountsModule {}

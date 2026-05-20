@@ -10,7 +10,10 @@ export class PostViewDto {
   @ApiProperty({
     description: 'Creator of the post',
   })
-  username: string;
+  authorName: string;
+
+  @ApiProperty()
+  authorId: string;
 
   @ApiProperty({
     description: 'Description of the post',
@@ -38,7 +41,8 @@ export class PostViewDto {
     const dto = new PostViewDto();
 
     dto.id = post.id;
-    dto.username = post.author.userName;
+    dto.authorName = post.author.userName;
+    dto.authorId = post.author.id;
     dto.description = post.description;
     dto.imageUrl = post.images.map((image) => image.url);
     dto.createdAt = post.createdAt;
