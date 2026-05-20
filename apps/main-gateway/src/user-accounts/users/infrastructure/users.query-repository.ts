@@ -24,4 +24,8 @@ export class UsersQueryRepository {
     }
     return MeViewDto.mapToView(foundUser);
   }
+
+  async getTotalUsersCount(): Promise<number> {
+    return await this.usersQueryRepository.count();
+  }
 }

@@ -8,6 +8,10 @@ export class CreatePostDto {
   author: User;
 }
 
+export class UpdatePostDto {
+  description: string;
+}
+
 @Entity('posts')
 export class Post extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', length: 500 })
@@ -15,6 +19,9 @@ export class Post extends BaseWithUuidIdEntity {
 
   @ManyToOne(() => User)
   author: User;
+
+  @Column()
+  authorId: string;
 
   @OneToMany(() => PostImage, (image) => image.post, {
     cascade: true,
@@ -26,5 +33,9 @@ export class Post extends BaseWithUuidIdEntity {
     post.description = dto.description;
     post.author = dto.author;
     return post;
+  }
+
+  update(dto: UpdatePostDto): void {
+    this.description = dto.description;
   }
 }

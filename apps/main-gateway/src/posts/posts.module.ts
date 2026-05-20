@@ -12,6 +12,9 @@ import { User } from '../user-accounts/users/domain/user.entity';
 import { UsersRepository } from '../user-accounts/users/infrastructure/users.repository';
 import { PostsService } from './application/posts.service';
 import { FilesClientModule } from '../clients/files/files-client.module';
+import { UserAccountsModule } from '../user-accounts/user-accounts.module';
+import { UpdatePostUseCase } from './application/use-case/update-post.use-case';
+import { DeletePostUseCase } from './application/use-case/delete-post.use-case';
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import { FilesClientModule } from '../clients/files/files-client.module';
     TypeOrmModule.forFeature([Post, PostImage, User]),
     MulterModule.register(),
     FilesClientModule,
+    UserAccountsModule,
   ],
   controllers: [PostsController],
   providers: [
@@ -26,6 +30,8 @@ import { FilesClientModule } from '../clients/files/files-client.module';
     PostsQueryRepository,
     UsersRepository,
     CreatePostUseCase,
+    UpdatePostUseCase,
+    DeletePostUseCase,
     PostsService,
   ],
   exports: [TypeOrmModule],
