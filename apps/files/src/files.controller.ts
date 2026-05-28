@@ -19,4 +19,25 @@ export class FilesController {
       }),
     );
   }
+
+  @MessagePattern('send_avatar')
+  async saveAvatar(data: {
+    fileData: string;
+    mimetype: string;
+  }): Promise<{ publicId: string; url: string }> {
+    return await this.cloudinaryService.uploadImage(
+      data.fileData,
+      data.mimetype,
+    );
+  }
+
+  @MessagePattern('delete_images')
+  async deleteImages(publicIds: string[]): Promise<void> {
+    return await this.cloudinaryService.deleteImages(publicIds);
+  }
+
+  @MessagePattern('delete_avatar')
+  async deleteAvatar(publicId: string): Promise<void> {
+    return await this.cloudinaryService.deleteAvatar(publicId);
+  }
 }

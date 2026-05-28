@@ -29,12 +29,10 @@ export function ApiCreatePost() {
         type: 'object',
         required: ['description', 'images'],
         properties: {
-          // поля из CreatePostDto — перечисли свои
           description: {
             type: 'string',
             example: 'My post description',
           },
-          // поле для файлов из PostInputDtoWithFiles
           images: {
             type: 'files',
             items: {
@@ -202,6 +200,19 @@ export function ApiGetMainPagePosts() {
       status: HttpStatus.OK,
       description: 'Posts have been successfully retrieved',
       type: MainPagePostsViewDto,
+    }),
+  );
+}
+
+export function ApiGetPostById() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Get post by ID',
+    }),
+    ApiResponse({
+      status: HttpStatus.OK,
+      description: 'Post has been successfully retrieved',
+      type: PostViewDto,
     }),
   );
 }

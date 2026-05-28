@@ -23,7 +23,12 @@ export class CloudinaryService {
       url: result.secure_url,
     };
   }
-  async deleteImage(publicId: string): Promise<void> {
+
+  async deleteImages(publicIds: string[]): Promise<void> {
+    await cloudinary.api.delete_resources(publicIds);
+  }
+
+  async deleteAvatar(publicId: string): Promise<void> {
     await cloudinary.uploader.destroy(publicId);
   }
 }
