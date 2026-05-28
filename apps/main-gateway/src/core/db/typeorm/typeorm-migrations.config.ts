@@ -7,6 +7,8 @@ import { EmailConfirmation } from 'apps/main-gateway/src/user-accounts/users/dom
 import { Session } from '../../../user-accounts/sessions/domain/session.entity';
 import { Provider } from 'apps/main-gateway/src/user-accounts/users/domain/provider.entity';
 import { PasswordRecovery } from '../../../user-accounts/users/domain/password-recovery.entity';
+import { Post } from '../../../posts/domain/post.entity';
+import { PostImage } from '../../../posts/domain/post-image.entity';
 
 const baseDir = join(__dirname, '..', '..', '..');
 const envFilePaths = envFileBasePaths(baseDir);
@@ -16,6 +18,14 @@ const migrationsConfig: DataSourceOptions = {
   migrations: [
     join(baseDir, 'core', 'db', 'typeorm', 'migrations', '**', '*.ts'),
   ],
-  entities: [User, EmailConfirmation, Provider, Session, PasswordRecovery],
+  entities: [
+    User,
+    EmailConfirmation,
+    Provider,
+    Session,
+    PasswordRecovery,
+    Post,
+    PostImage,
+  ],
 };
 export default new DataSource(migrationsConfig);

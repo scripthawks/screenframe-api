@@ -1,8 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { FilesModule } from './files.module';
+import { Transport } from '@nestjs/microservices';
+import { FileConfig } from './config/file.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(FilesModule);
-  await app.listen(process.env.port ?? 3000);
+  const appContext = await NestFactory.createApplicationContext(FilesModule);
+  const fileConfig = appContext.get<FileConfig>(FileConfig);
+  await appContext.close();
+
+  const app = await NestFactory.createMicroservice(FilesModule, {
+    transport: Transport.TCP,
+    options: {
+      host: '0.0.0.0',
+      port: fileConfig.filesServicePort,
+    },
+  });
+
+  await app.listen();
+  console.log(`Files service started on port ${fileConfig.filesServicePort}`);
 }
 bootstrap();

@@ -10,6 +10,7 @@ import { CreateSessionDto } from '../../../sessions/domain/dto/create-session.dt
 import { JwtPayload } from 'apps/main-gateway/src/core/strategies/jwt-access.strategy';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 import { DomainException } from '@app/core/exceptions';
+import { StringValue } from 'ms';
 
 export class LoginUserCommand {
   constructor(
@@ -47,14 +48,15 @@ export class LoginUserUseCase
     };
     const accessToken = await this.jwtService.signAsync(payloadForAccessToken, {
       secret: this.userAccountConfig.ACCESS_TOKEN_SECRET,
-      expiresIn: parseInt(this.userAccountConfig.ACCESS_TOKEN_EXPIRATION),
+      expiresIn: this.userAccountConfig.ACCESS_TOKEN_EXPIRATION as StringValue,
     });
 
     const refreshToken = await this.jwtService.signAsync(
       payloadForRefreshToken,
       {
         secret: this.userAccountConfig.REFRESH_TOKEN_SECRET,
-        expiresIn: parseInt(this.userAccountConfig.REFRESH_TOKEN_EXPIRATION),
+        expiresIn: this.userAccountConfig
+          .REFRESH_TOKEN_EXPIRATION as StringValue,
       },
     );
     const decodePayload: JwtPayload = this.jwtService.decode(refreshToken);
