@@ -15,9 +15,8 @@ export class PostImage extends BaseWithUuidIdEntity {
   @Column()
   url: string;
 
-  static create(dto: { post: Post; publicId: string; url: string }): PostImage {
+  static create(dto: { publicId: string; url: string }): PostImage {
     const postImage = new this();
-    postImage.post = dto.post;
     postImage.fileId = dto.publicId;
     postImage.url = dto.url;
     return postImage;

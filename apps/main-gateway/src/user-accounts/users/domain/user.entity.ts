@@ -8,6 +8,8 @@ import { EmailConfirmation } from './emailConfirmation.entity';
 import { Session } from '../../sessions/domain/session.entity';
 import { Provider } from './provider.entity';
 import { PasswordRecovery } from './password-recovery.entity';
+import { Post } from '../../../posts/domain/post.entity';
+import { Profile } from './profile.entity';
 @Entity()
 export class User extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', unique: true, collation: 'C' })
@@ -49,6 +51,15 @@ export class User extends BaseWithUuidIdEntity {
     { onDelete: 'CASCADE', cascade: true },
   )
   passwordRecovery: PasswordRecovery;
+
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  profile: Profile;
+
+  @OneToMany(() => Post, (post) => post.author)
+  posts: Post[];
 
   static create(dto: CreateUserDto): User {
     const user = new User();

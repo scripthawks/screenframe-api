@@ -33,6 +33,7 @@ import {
   ApiDeletePost,
   ApiGetPostsByUserId,
   ApiGetMainPagePosts,
+  ApiGetPostById,
   ApiUpdatePost,
 } from '../../docs/post.swagger';
 
@@ -107,5 +108,13 @@ export class PostsController {
     const totalUsersCount =
       await this.usersQueryRepository.getTotalUsersCount();
     return { posts, totalUsersCount };
+  }
+
+  @Get(':postId')
+  @ApiGetPostById()
+  async getPostById(
+    @Param('postId') postId: string,
+  ): Promise<PostViewDto | null> {
+    return await this.postsQueryRepository.findOne(postId);
   }
 }

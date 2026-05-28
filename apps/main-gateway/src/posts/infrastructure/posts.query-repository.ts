@@ -15,7 +15,7 @@ export class PostsQueryRepository {
 
   async findOne(id: string): Promise<PostViewDto | null> {
     const post = await this.postsQueryRepository.findOne({
-      where: { id },
+      where: { id, deletedAt: IsNull() },
       relations: ['author', 'images'],
     });
     if (!post) return null;

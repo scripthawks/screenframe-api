@@ -17,7 +17,7 @@ export class Post extends BaseWithUuidIdEntity {
   @Column({ type: 'varchar', length: 500 })
   description: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.posts)
   author: User;
 
   @Column()

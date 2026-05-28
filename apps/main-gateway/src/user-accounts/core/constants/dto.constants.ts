@@ -2,6 +2,16 @@ export const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 export const USERNAME_MAX_LENGTH = 30;
 export const USERNAME_MIN_LENGTH = 6;
 
+export const FIRST_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+export const FIRST_NAME_MAX_LENGTH = 50;
+export const FIRST_NAME_MIN_LENGTH = 1;
+
+export const LAST_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+export const LAST_NAME_MAX_LENGTH = 50;
+export const LAST_NAME_MIN_LENGTH = 1;
+export const ABOUT_ME_MAX_LENGTH = 200;
+export const ABOUT_ME_MIN_LENGTH = 1;
+
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const PASSWORD_REGEX =
