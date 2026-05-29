@@ -11,7 +11,7 @@ import {
   Patch,
   Param,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'apps/main-gateway/src/core/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CurrentUserId } from '@app/core/decorators/params';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateProfileInputDto } from './input-dto/create-profile.input-dto';

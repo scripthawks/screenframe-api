@@ -23,7 +23,9 @@ export function ApiCreatePost() {
       description: 'The post has been successfully created',
       type: PostViewDto,
     }),
-    ApiConsumes('description - application/json, images - multipart/form-data'),
+    // ApiConsumes('description - application/json, images - multipart/form-data'),
+    ApiConsumes('application/json'),
+    ApiConsumes('multipart/form-data'),
     ApiBody({
       schema: {
         type: 'object',
@@ -34,9 +36,9 @@ export function ApiCreatePost() {
             example: 'My post description',
           },
           images: {
-            type: 'files',
+            type: 'array',
             items: {
-              type: 'files',
+              type: 'string',
               format: 'binary',
             },
             description: 'Images (JPEG, JPG, PNG)',

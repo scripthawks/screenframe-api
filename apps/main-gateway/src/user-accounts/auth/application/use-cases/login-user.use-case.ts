@@ -7,7 +7,7 @@ import { LoginSuccessViewDto } from '../../api/view-dto/login-success.view-dto';
 import { SessionsRepository } from '../../../sessions/infrastructure/sessions.repository';
 import { Session } from '../../../sessions/domain/session.entity';
 import { CreateSessionDto } from '../../../sessions/domain/dto/create-session.dto';
-import { JwtPayload } from 'apps/main-gateway/src/core/strategies/jwt-access.strategy';
+import { JwtPayload } from '../../../../core/strategies/jwt-access.strategy';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 import { DomainException } from '@app/core/exceptions';
 import { StringValue } from 'ms';
