@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UsersRepository } from '../../infrastructure/users.repository';
 import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
-import { FilesClientService } from 'apps/main-gateway/src/clients/files/file-client.service';
+import { FilesClientService } from '../../../../clients/files/file-client.service';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { User } from '../../domain/user.entity';
 import { UsersService } from '../users.service';

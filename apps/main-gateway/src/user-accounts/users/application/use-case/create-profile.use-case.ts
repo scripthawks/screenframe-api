@@ -4,7 +4,7 @@ import { UsersRepository } from '../../infrastructure/users.repository';
 import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 import { Profile } from '../../domain/profile.entity';
-import { FilesClientService } from 'apps/main-gateway/src/clients/files/file-client.service';
+import { FilesClientService } from '../../../../clients/files/file-client.service';
 import { DataSource } from 'typeorm';
 import { UsersService } from '../users.service';
 import { User } from '../../domain/user.entity';
