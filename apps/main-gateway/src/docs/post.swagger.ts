@@ -23,25 +23,27 @@ export function ApiCreatePost() {
       description: 'The post has been successfully created',
       type: PostViewDto,
     }),
-    ApiConsumes('description - application/json, images - multipart/form-data'),
+    ApiConsumes('application/json'),
+    ApiConsumes('multipart/form-data'),
     ApiBody({
       schema: {
         type: 'object',
-        required: ['description', 'images'],
+        required: ['description'],
         properties: {
-          // поля из CreatePostDto — перечисли свои
           description: {
             type: 'string',
             example: 'My post description',
           },
-          // поле для файлов из PostInputDtoWithFiles
-          images: {
-            type: 'files',
+          image: {
+            type: 'array',
             items: {
-              type: 'files',
+              type: 'file',
               format: 'binary',
+              example: 'Need send image as a file',
             },
-            description: 'Images (JPEG, JPG, PNG)',
+            maxItems: 10,
+            maxLength: 20 * 1024 * 1024,
+            description: 'Images (JPEG, JPG, PNG) max 10 images and 20MB each',
           },
         },
       },
@@ -53,9 +55,6 @@ export function ApiCreatePost() {
         'Invalid request (validation failed or user not found or deleted or invalid file type).',
       content: {
         'application/json': {
-          schema: {
-            oneOf: [{ $ref: getSchemaPath(ApiFieldErrorDto) }],
-          },
           examples: {
             validationFailed: {
               summary: 'DTO validation failed',
@@ -202,6 +201,19 @@ export function ApiGetMainPagePosts() {
       status: HttpStatus.OK,
       description: 'Posts have been successfully retrieved',
       type: MainPagePostsViewDto,
+    }),
+  );
+}
+
+export function ApiGetPostById() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Get post by ID',
+    }),
+    ApiResponse({
+      status: HttpStatus.OK,
+      description: 'Post has been successfully retrieved',
+      type: PostViewDto,
     }),
   );
 }

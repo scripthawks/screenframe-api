@@ -3,7 +3,7 @@ import { LoginSuccessViewDto } from '../../api/view-dto/login-success.view-dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserAccountConfig } from '../../../core/config/user-account.config';
 import { SessionsRepository } from '../../../sessions/infrastructure/sessions.repository';
-import { JwtPayload } from 'apps/main-gateway/src/core/strategies/jwt-access.strategy';
+import { JwtPayload } from '../../../../core/strategies/jwt-access.strategy';
 
 export class RefreshTokenCommand {
   constructor(

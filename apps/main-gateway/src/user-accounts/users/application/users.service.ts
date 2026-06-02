@@ -3,6 +3,8 @@ import { CreateUserDto } from '../domain/dto/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { User } from '../domain/user.entity';
 import { UsersQueryRepository } from '../infrastructure/users.query-repository';
+import { CommonExceptionCodes } from '@app/core/exceptions/enums/common-exception-codes.enum';
+import { DomainException } from '@app/core/exceptions/domain.exception';
 
 @Injectable()
 export class UsersService {
@@ -23,5 +25,16 @@ export class UsersService {
 
   async findAll() {
     return await this.usersQRepository.findAll();
+  }
+
+  async validateUserName(userId: string, userName: string): Promise<void> {
+    const existing = await this.usersRepository.findByUserName(userName);
+
+    if (existing && existing.id !== userId) {
+      throw new DomainException(
+        CommonExceptionCodes.CONFLICT,
+        'User with this username is already registered',
+      );
+    }
   }
 }

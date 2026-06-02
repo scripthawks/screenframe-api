@@ -17,6 +17,13 @@ export class UsersRepository {
     });
   }
 
+  async findByIdWithProfile(id: string): Promise<User | null> {
+    return await this.usersRepository.findOne({
+      where: { id, deletedAt: IsNull() },
+      relations: { profile: true },
+    });
+  }
+
   async create(user: User): Promise<User> {
     return this.usersRepository.save(user);
   }

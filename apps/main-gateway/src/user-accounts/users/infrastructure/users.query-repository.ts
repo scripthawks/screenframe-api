@@ -28,4 +28,11 @@ export class UsersQueryRepository {
   async getTotalUsersCount(): Promise<number> {
     return await this.usersQueryRepository.count();
   }
+
+  async getUserWithProfile(userId: string): Promise<User | null> {
+    return await this.usersQueryRepository.findOne({
+      where: { id: userId },
+      relations: { profile: true },
+    });
+  }
 }

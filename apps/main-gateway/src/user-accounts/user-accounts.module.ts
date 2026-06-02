@@ -52,6 +52,12 @@ import { CheckRecoveryTokenUseCase } from './auth/application/use-cases/check-re
 import { PasswordRecoveryResendingUseCase } from './auth/application/use-cases/password-recovery-resending.use-case';
 import { NewPasswordUseCase } from './auth/application/use-cases/new-password.use-case';
 import { GoogleStrategy } from './core/strategies/google.strategy';
+import { CreateUserProfileUseCase } from './users/application/use-case/create-profile.use-case';
+import { UpdateUserProfileUseCase } from './users/application/use-case/update-profile.use-case';
+import { GetUserProfileQueryHandler } from './users/application/queries/get-profile.query';
+import { FilesClientModule } from '../clients/files/files-client.module';
+import { Profile } from './users/domain/profile.entity';
+import { ProfileController } from './users/api/profile.controller';
 
 const configs = [UserAccountConfig, NotificationConfig, CoreConfig];
 const adapters = [ArgonHasher];
@@ -62,7 +68,12 @@ const strategies = [
   GithubStrategy,
   GoogleStrategy,
 ];
-const controllers = [UsersController, AuthController, SessionsController];
+const controllers = [
+  UsersController,
+  AuthController,
+  SessionsController,
+  ProfileController,
+];
 const services = [
   JwtService,
   AuthService,
@@ -84,8 +95,14 @@ const useCases = [
   CheckRecoveryTokenUseCase,
   PasswordRecoveryResendingUseCase,
   NewPasswordUseCase,
+  CreateUserProfileUseCase,
+  UpdateUserProfileUseCase,
 ];
-const queries = [GetInfoAboutCurrentUserQueryHandler, GetSessionsQueryHandler];
+const queries = [
+  GetInfoAboutCurrentUserQueryHandler,
+  GetSessionsQueryHandler,
+  GetUserProfileQueryHandler,
+];
 const repositories = [
   UsersRepository,
   UsersQueryRepository,
@@ -96,13 +113,15 @@ const repositories = [
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, EmailConfirmation, Provider, Session]),
     TypeOrmModule.forFeature([
       User,
       EmailConfirmation,
+      Provider,
       Session,
       PasswordRecovery,
+      Profile,
     ]),
+
     CqrsModule,
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
@@ -113,6 +132,7 @@ const repositories = [
       },
     ]),
     HttpModule,
+    FilesClientModule,
   ],
   controllers: [...controllers],
   providers: [
