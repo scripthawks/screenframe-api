@@ -9,6 +9,7 @@ import { Provider } from '../../../user-accounts/users/domain/provider.entity';
 import { PasswordRecovery } from '../../../user-accounts/users/domain/password-recovery.entity';
 import { Post } from '../../../posts/domain/post.entity';
 import { PostImage } from '../../../posts/domain/post-image.entity';
+import { Profile } from '../../../user-accounts/users/domain/profile.entity';
 
 const baseDir = join(__dirname, '..', '..', '..');
 const envFilePaths = envFileBasePaths(baseDir);
@@ -20,6 +21,7 @@ const migrationsConfig: DataSourceOptions = {
   ],
   entities: [
     User,
+    Profile,
     EmailConfirmation,
     Provider,
     Session,

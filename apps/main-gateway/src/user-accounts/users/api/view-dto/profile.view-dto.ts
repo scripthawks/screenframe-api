@@ -14,19 +14,19 @@ export class ProfileViewDto {
   @ApiProperty()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Date, nullable: true })
   birthDate?: Date | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   country?: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   city?: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   about?: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   avatarUrl?: string | null;
 
   @ApiProperty()

@@ -23,25 +23,27 @@ export function ApiCreatePost() {
       description: 'The post has been successfully created',
       type: PostViewDto,
     }),
-    // ApiConsumes('description - application/json, images - multipart/form-data'),
     ApiConsumes('application/json'),
     ApiConsumes('multipart/form-data'),
     ApiBody({
       schema: {
         type: 'object',
-        required: ['description', 'images'],
+        required: ['description'],
         properties: {
           description: {
             type: 'string',
             example: 'My post description',
           },
-          images: {
+          image: {
             type: 'array',
             items: {
-              type: 'string',
+              type: 'file',
               format: 'binary',
+              example: 'Need send image as a file',
             },
-            description: 'Images (JPEG, JPG, PNG)',
+            maxItems: 10,
+            maxLength: 20 * 1024 * 1024,
+            description: 'Images (JPEG, JPG, PNG) max 10 images and 20MB each',
           },
         },
       },
@@ -53,9 +55,6 @@ export function ApiCreatePost() {
         'Invalid request (validation failed or user not found or deleted or invalid file type).',
       content: {
         'application/json': {
-          schema: {
-            oneOf: [{ $ref: getSchemaPath(ApiFieldErrorDto) }],
-          },
           examples: {
             validationFailed: {
               summary: 'DTO validation failed',

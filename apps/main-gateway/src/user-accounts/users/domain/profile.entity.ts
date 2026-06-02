@@ -6,7 +6,7 @@ import { UpdateProfileDto } from '../application/dto/update-profile.dto';
 
 @Entity()
 export class Profile extends BaseWithUuidIdEntity {
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 
