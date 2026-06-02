@@ -5,7 +5,6 @@ import { DomainException } from '@app/core/exceptions';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums';
 import { Profile } from '../../domain/profile.entity';
 import { FilesClientService } from '../../../../clients/files/file-client.service';
-import { DataSource } from 'typeorm';
 import { UsersService } from '../users.service';
 import { User } from '../../domain/user.entity';
 
@@ -24,7 +23,6 @@ export class CreateUserProfileUseCase
   constructor(
     private usersRepository: UsersRepository,
     private filesClientService: FilesClientService,
-    private dataSource: DataSource,
     private usersService: UsersService,
   ) {}
 

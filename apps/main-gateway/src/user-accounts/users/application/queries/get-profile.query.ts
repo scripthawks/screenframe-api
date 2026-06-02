@@ -21,6 +21,12 @@ export class GetUserProfileQueryHandler
         'User not found or delete',
       );
     }
+    if (!user.profile) {
+      throw new DomainException(
+        CommonExceptionCodes.NOT_FOUND,
+        'Profile not found or deleted',
+      );
+    }
 
     return ProfileViewDto.mapToView(user);
   }

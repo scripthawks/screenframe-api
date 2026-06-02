@@ -23,6 +23,11 @@ import { GetUserProfileQuery } from '../application/queries/get-profile.query';
 import { UpdateUserProfileCommand } from '../application/use-case/update-profile.use-case';
 import { DomainException } from '@app/core/exceptions/domain.exception';
 import { CommonExceptionCodes } from '@app/core/exceptions/enums/common-exception-codes.enum';
+import {
+  ApiCreateProfile,
+  ApiGetProfile,
+  ApiUpdateProfile,
+} from '../../../docs/profile.swagger';
 
 @Controller('profile')
 export class ProfileController {
@@ -31,12 +36,14 @@ export class ProfileController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  @ApiGetProfile()
   @Get('/:userId')
   @HttpCode(HttpStatus.OK)
   async getProfile(@Param('userId') userId: string): Promise<ProfileViewDto> {
     return await this.queryBus.execute(new GetUserProfileQuery(userId));
   }
 
+  @ApiCreateProfile()
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(
@@ -58,6 +65,7 @@ export class ProfileController {
     return await this.queryBus.execute(new GetUserProfileQuery(userId));
   }
 
+  @ApiUpdateProfile()
   @UseGuards(JwtAuthGuard)
   @Patch()
   @UseInterceptors(

@@ -7,6 +7,7 @@ import {
   IsString,
   Length,
   Matches,
+  MaxDate,
 } from 'class-validator';
 import {
   FIRST_NAME_MIN_LENGTH,
@@ -51,6 +52,9 @@ export class CreateProfileInputDto {
   @IsOptional()
   @Transform(({ value }: { value: string }) => (value ? new Date(value) : null))
   @IsDate({ message: 'Birth date must be a valid date' })
+  @MaxDate(new Date(new Date().setFullYear(new Date().getFullYear() - 13)), {
+    message: 'Birth date must be at least 13 years old',
+  })
   @ApiProperty({ example: '1990-01-01' })
   birthDate?: Date;
 

@@ -52,10 +52,7 @@ export class User extends BaseWithUuidIdEntity {
   )
   passwordRecovery: PasswordRecovery;
 
-  @OneToOne(() => Profile, (profile) => profile.user, {
-    onDelete: 'CASCADE',
-    cascade: true,
-  })
+  @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
 
   @OneToMany(() => Post, (post) => post.author)
